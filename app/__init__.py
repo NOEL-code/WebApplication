@@ -1,12 +1,23 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
+from config import Config
+
+db = SQLAlchemy()
+login_manager = LoginManager()
+login_manager.login_view = "auth.login"
 
 def create_app():
     app = Flask(__name__)
-    
-    # 여기에서 추가로 설정할 것이 있으면 추가
-    # ex) app.config['SECRET_KEY'] = 'your_secret_key'
+    app.config.from_object(Config)
 
-    # 블루프린트 등록
+    db.init_app(app)
+    login_manager.init_app(app)
+
+    with app.app_context():
+        from . import models
+        db.create_all()
+
     from .views import main
     app.register_blueprint(main)
 

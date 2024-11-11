@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Propose a Date</title>
+  </head>
+  <body>
+    <h2>Propose a Date to {{ recipient.profile.name }}</h2>
+    <form method="post">
+      <label for="date">Date:</label>
+      <input type="datetime-local" id="date" name="date" required />
+      <button type="submit">Propose</button>
+    </form>
+  </body>
+</html>
