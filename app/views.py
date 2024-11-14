@@ -7,7 +7,7 @@ main = Blueprint("main", __name__)
 
 @main.route("/login")
 def login():
-    return render_template("login.html")
+    return render_template("auth/login.html")
 
 @main.route("/profile/<int:user_id>")
 @login_required
