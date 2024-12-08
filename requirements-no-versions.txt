@@ -1,5 +1,0 @@
-Flask
-python-dateutil
-flask-login
-flask-sqlalchemy
-PyMySQL
