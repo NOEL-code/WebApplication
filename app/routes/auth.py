@@ -1,72 +1,127 @@
-from flask import Blueprint, request, jsonify, session
+import os
+import pathlib
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash, current_app
+from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.models import db, User
+from werkzeug.utils import secure_filename
+from app.models import db, User, Profile, Photo
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-# 회원가입
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def ensure_photo_directory():
+    directory = pathlib.Path(current_app.root_path) / "static" / "photos"
+    if not directory.exists():
+        directory.mkdir(parents=True)
+
+def photo_filename(photo):
+    path = (
+        pathlib.Path(current_app.root_path)
+        / "static"
+        / "photos"
+        / f"photo-{photo.id}.{photo.file_extension}"
+    )
+    return path
+
+@bp.route('/register', methods=['GET'])
+def register_form():
+    return render_template('auth/register.html')
+
 @bp.route('/register', methods=['POST'])
 def register():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    first_name = request.form.get('first_name')
+    gender = request.form.get('gender')
+    birth_year = request.form.get('birth_year')
+    description = request.form.get('description', "Welcome to Dine & Date!")
+    photo = request.files.get('photo')
 
-    if not email or not password:
-        return jsonify({"error": "Email and password are required"}), 400
+    if not email or not password or not first_name or not gender or not birth_year:
+        flash("All fields are required.", "danger")
+        return redirect(url_for('auth.register_form'))
 
-    # 중복 이메일 체크
-    existing_user = User.query.filter_by(email=email).first()
-    if existing_user:
-        return jsonify({"error": "Email already exists"}), 409
+    if User.query.filter_by(email=email).first():
+        flash("Email already exists.", "danger")
+        return redirect(url_for('auth.register_form'))
 
-    # 비밀번호 해싱 및 사용자 생성
     hashed_password = generate_password_hash(password)
     new_user = User(email=email, password_hash=hashed_password)
-
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"message": "User registered successfully"}), 201
+    default_profile = Profile(
+        user_id=new_user.id,
+        first_name=first_name,
+        gender=gender,
+        birth_year=int(birth_year),
+        description=description
+    )
+    db.session.add(default_profile)
+    db.session.commit()
 
-# 로그인
+    if photo and allowed_file(photo.filename):
+        ensure_photo_directory()
+        content_type = photo.content_type
+        file_extension = photo.filename.rsplit('.', 1)[1].lower()
+
+        photo_obj = Photo(file_extension=file_extension, profile_id=default_profile.id)
+        db.session.add(photo_obj)
+        db.session.commit()
+
+        photo_path = photo_filename(photo_obj)
+        photo.save(photo_path)
+    elif photo:
+        flash("Unsupported file type.", "danger")
+        return redirect(url_for('auth.register_form'))
+
+    flash("User registered successfully. Please log in.", "success")
+    return redirect(url_for('auth.login_form'))
+
+# 로그인 폼 페이지 (GET)
+@bp.route('/login', methods=['GET'])
+def login_form():
+    return render_template('auth/login.html')
+
+# 로그인 처리 (POST)
 @bp.route('/login', methods=['POST'])
 def login():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
     if not email or not password:
-        return jsonify({"error": "Email and password are required"}), 400
+        flash("Email and password are required.", "danger")
+        return redirect(url_for('auth.login_form'))
 
     # 사용자 확인
     user = User.query.filter_by(email=email).first()
     if not user or not check_password_hash(user.password_hash, password):
-        return jsonify({"error": "Invalid email or password"}), 401
+        flash("Invalid email or password.", "danger")
+        return redirect(url_for('auth.login_form'))
 
-    # 세션에 사용자 ID 저장
-    session['user_id'] = user.id
-    return jsonify({"message": "Login successful", "user_id": user.id}), 200
+    # 사용자 로그인
+    login_user(user)
+    flash("Login successful.", "success")
+    return redirect(url_for('main.home'))  # 메인 페이지로 리다이렉트
 
 # 로그아웃
-@bp.route('/logout', methods=['POST'])
+@bp.route('/logout', methods=['GET', 'POST'])
+@login_required
 def logout():
-    # 세션에서 사용자 ID 제거
-    session.pop('user_id', None)
-    return jsonify({"message": "Logout successful"}), 200
+    logout_user()
+    flash("Logout successful.", "success")
+    return redirect(url_for('auth.login_form'))
 
-# 현재 로그인된 사용자 정보 확인
+# 현재 로그인된 사용자 정보 확인 (API)
 @bp.route('/current-user', methods=['GET'])
-def current_user():
-    user_id = session.get('user_id')
-    if not user_id:
-        return jsonify({"error": "No user is logged in"}), 401
-
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
+@login_required
+def current_user_info():
     return jsonify({
-        "user_id": user.id,
-        "email": user.email,
-        "created_at": user.created_at
+        "user_id": current_user.id,
+        "email": current_user.email,
+        "created_at": current_user.created_at
     }), 200

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dine & Date</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="container">
+          <a href="{{ url_for('main.home') }}" class="logo">Dine & Date</a>
+          <ul class="nav-links">
+            {% if current_user.is_authenticated %}
+            <li>
+              <a
+                href="{{ url_for('profiles.view_profile', user_id=current_user.id) }}"
+                >My Profile</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('proposals.list_proposals') }}"
+                >My Proposals</a
+              >
+            </li>
+            <li>
+              <form method="post" action="{{ url_for('auth.logout') }}">
+                <button type="submit" class="logout-button">Logout</button>
+              </form>
+            </li>
+            {% else %}
+            <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+            <li><a href="{{ url_for('auth.register') }}">Register</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <h1>Welcome to Dine & Date</h1>
+          <p>
+            Find your perfect dining partner at our exclusive restaurant tables.
+          </p>
+          <div class="cta-buttons">
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('proposals.create_proposal') }}" class="btn"
+              >Propose a Date</a
+            >
+            <a href="{{ url_for('profiles.browse_profiles') }}" class="btn"
+              >Browse Profiles</a
+            >
+            {% else %}
+            <a href="{{ url_for('auth.register') }}" class="btn">Join Now</a>
+            <a href="{{ url_for('auth.login') }}" class="btn">Login</a>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+
+      <section class="features">
+        <div class="container">
+          <h2>How It Works</h2>
+          <div class="feature-list">
+            <div class="feature">
+              <h3>Create Your Profile</h3>
+              <p>
+                Share your interests and preferences to find the perfect match.
+              </p>
+            </div>
+            <div class="feature">
+              <h3>Match and Propose</h3>
+              <p>Browse profiles, like others, and propose a dinner date.</p>
+            </div>
+            <div class="feature">
+              <h3>Dine in Style</h3>
+              <p>Enjoy a romantic dinner in our exclusive dining area.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="testimonials">
+        <div class="container">
+          <h2>What Our Users Say</h2>
+          <div class="testimonial-list">
+            <div class="testimonial">
+              <p>
+                "Dine & Date helped me meet my soulmate. Highly recommended!"
+              </p>
+              <span>- Emily R.</span>
+            </div>
+            <div class="testimonial">
+              <p>"A unique and delightful way to meet new people."</p>
+              <span>- John D.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2024 Dine & Date. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

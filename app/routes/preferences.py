@@ -1,64 +1,56 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_required, current_user
 from app.models import db, User, MatchingPreference
 
 bp = Blueprint('preferences', __name__, url_prefix='/preferences')
 
 # 매칭 선호도 설정 및 수정
-@bp.route('/update', methods=['POST', 'PUT'])
-def update_preferences():
-    data = request.json
-    user_id = data.get('user_id')
-    preferred_genders = data.get('preferred_genders')
-    min_age = data.get('min_age')
-    max_age = data.get('max_age')
+@bp.route('/edit', methods=['GET', 'POST'])
+@login_required
+def edit_preferences():
+    # 매칭 선호도 조회 또는 기본값 설정
+    preference = MatchingPreference.query.filter_by(user_id=current_user.id).first()
 
-    # 입력값 확인
-    if not user_id or not preferred_genders or min_age is None or max_age is None:
-        return jsonify({"error": "user_id, preferred_genders, min_age, and max_age are required"}), 400
+    if request.method == 'POST':
+        # 폼 데이터 가져오기
+        preferred_genders = request.form.getlist('preferred_genders')
+        min_age = int(request.form.get('min_age', 18))
+        max_age = int(request.form.get('max_age', 100))
 
-    # 사용자 존재 여부 확인
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
+        # 입력값 검증
+        if min_age < 18 or max_age > 100 or min_age > max_age:
+            flash("Invalid age range. Please check your inputs.", "danger")
+            return redirect(url_for('preferences.edit_preferences'))
 
-    # 매칭 선호도 조회
-    preference = MatchingPreference.query.filter_by(user_id=user_id).first()
+        # 매칭 선호도 업데이트 또는 생성
+        if not preference:
+            preference = MatchingPreference(
+                user_id=current_user.id,
+                preferred_genders=preferred_genders,
+                min_age=min_age,
+                max_age=max_age
+            )
+            db.session.add(preference)
+        else:
+            preference.preferred_genders = preferred_genders
+            preference.min_age = min_age
+            preference.max_age = max_age
 
-    # 선호도 없으면 새로 생성
+        db.session.commit()
+
+        flash("Preferences updated successfully.", "success")
+        return redirect(url_for('home.home'))
+
+    return render_template('preferences_edit.html', preference=preference)
+
+# 매칭 선호도 보기
+@bp.route('/view', methods=['GET'])
+@login_required
+def view_preferences():
+    preference = MatchingPreference.query.filter_by(user_id=current_user.id).first()
+
     if not preference:
-        preference = MatchingPreference(
-            user_id=user_id,
-            preferred_genders=preferred_genders,
-            min_age=min_age,
-            max_age=max_age
-        )
-        db.session.add(preference)
-    else:
-        # 기존 선호도 업데이트
-        preference.preferred_genders = preferred_genders
-        preference.min_age = min_age
-        preference.max_age = max_age
+        flash("No matching preferences found. Please set your preferences.", "warning")
+        return redirect(url_for('preferences.edit_preferences'))
 
-    db.session.commit()
-
-    return jsonify({"message": "Preferences updated successfully"}), 200
-
-# 매칭 선호도 조회
-@bp.route('/<int:user_id>', methods=['GET'])
-def get_preferences(user_id):
-    # 사용자 존재 여부 확인
-    user = User.query.get(user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
-    # 매칭 선호도 조회
-    preference = MatchingPreference.query.filter_by(user_id=user_id).first()
-    if not preference:
-        return jsonify({"error": "No matching preferences found for this user"}), 404
-
-    return jsonify({
-        "user_id": preference.user_id,
-        "preferred_genders": preference.preferred_genders,
-        "min_age": preference.min_age,
-        "max_age": preference.max_age
-    }), 200
+    return render_template('preferences_view.html', preference=preference)

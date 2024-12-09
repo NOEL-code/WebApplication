@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Proposals - Dine & Date</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="container">
+          <a href="{{ url_for('main.home') }}" class="logo">Dine & Date</a>
+          <ul class="nav-links">
+            {% if current_user.is_authenticated %}
+            <li>
+              <a
+                href="{{ url_for('profiles.view_profile', user_id=current_user.id) }}"
+                >My Profile</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('proposals.list_proposals') }}"
+                >My Proposals</a
+              >
+            </li>
+            <li>
+              <form method="post" action="{{ url_for('auth.logout') }}">
+                <button type="submit" class="logout-button">Logout</button>
+              </form>
+            </li>
+            {% else %}
+            <li><a href="{{ url_for('auth.login_form') }}">Login</a></li>
+            <li><a href="{{ url_for('auth.register_form') }}">Register</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="proposals-list">
+        <div class="container">
+          <h1>My Proposals</h1>
+
+          <div class="proposals">
+            <h2>Sent Proposals</h2>
+            {% if proposals.sent %}
+            <ul>
+              {% for proposal in proposals.sent %}
+              <li>
+                <strong>To User ID:</strong> {{ proposal.recipient_id }}<br />
+                <strong>Date:</strong> {{ proposal.proposed_date }}<br />
+                <strong>Status:</strong> {{ proposal.status }}<br />
+                <strong>Message:</strong> {{ proposal.proposal_message }}<br />
+                <strong>Response:</strong> {{ proposal.response_message or "No
+                response yet" }}
+              </li>
+              <tr>
+                <td>{{ proposal.proposed_date }}</td>
+                <td>{{ proposal.status }}</td>
+                <td>
+                  {% if proposal.status == "Reschedule Requested" %}
+                  <span class="warning"
+                    >No tables available. Please reschedule.</span
+                  >
+                  {% else %}
+                  <span class="success">Pending confirmation</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p>You haven't sent any proposals yet.</p>
+            {% endif %}
+          </div>
+
+          <div class="proposals">
+            <h2>Received Proposals</h2>
+            {% if proposals.received %}
+            <ul>
+              {% for proposal in proposals.received %}
+              <li>
+                <strong>From User ID:</strong> {{ proposal.proposer_id }}<br />
+                <strong>Date:</strong> {{ proposal.proposed_date }}<br />
+                <strong>Status:</strong> {{ proposal.status }}<br />
+                <strong>Message:</strong> {{ proposal.proposal_message }}<br />
+                <strong>Response:</strong> {{ proposal.response_message or "No
+                response yet" }}
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p>No proposals received yet.</p>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2024 Dine & Date. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ profile.first_name }}'s Profile - Dine & Date</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="container">
+          <a href="{{ url_for('main.home') }}" class="logo">Dine & Date</a>
+          <ul class="nav-links">
+            {% if current_user.is_authenticated %}
+            <li>
+              <a
+                href="{{ url_for('profiles.view_profile', user_id=current_user.id) }}"
+                >My Profile</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('proposals.list_proposals') }}"
+                >My Proposals</a
+              >
+            </li>
+            <li>
+              <form method="post" action="{{ url_for('auth.logout') }}">
+                <button type="submit" class="logout-button">Logout</button>
+              </form>
+            </li>
+            {% else %}
+            <li><a href="{{ url_for('auth.login_form') }}">Login</a></li>
+            <li><a href="{{ url_for('auth.register_form') }}">Register</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="profile-view">
+        <div class="container">
+          <h1>{{ profile.first_name }}'s Profile</h1>
+
+          <div class="profile-picture">
+            {% if profile.photo %}
+            <img
+              src="{{ url_for('static', filename='photos/photo-' ~ profile.photo.id ~ '.' ~ profile.photo.file_extension) }}"
+              alt="Profile Picture"
+            />
+            {% else %}
+            <img
+              src="{{ url_for('static', filename='images/default_profile.png') }}"
+              alt="Default Profile Picture"
+            />
+            {% endif %}
+          </div>
+            <div class="profile-info">
+              <p><strong>Name:</strong> {{ profile.first_name }}</p>
+              <p><strong>Gender:</strong> {{ profile.gender.value }}</p>
+              <p><strong>Birth Year:</strong> {{ profile.birth_year }}</p>
+              <p><strong>About:</strong> {{ profile.description }}</p>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            {% if current_user.id != profile.user_id %}
+            <a
+              href="{{ url_for('proposals.create_proposal', user_id=profile.user_id) }}"
+              class="btn"
+              >Propose a Date</a
+            >
+            {% endif %}
+            <a href="{{ url_for('profiles.browse_profiles') }}" class="btn"
+              >Back to Profiles</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2024 Dine & Date. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>
