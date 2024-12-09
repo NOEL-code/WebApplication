@@ -18,7 +18,5 @@ def create_app():
         from . import models
         db.create_all()
 
-    from .views import main
-    app.register_blueprint(main)
 
     return app
