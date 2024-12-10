@@ -4,25 +4,23 @@ from app.models import db, User, MatchingPreference
 
 bp = Blueprint('preferences', __name__, url_prefix='/preferences')
 
-# 매칭 선호도 설정 및 수정
+# 선호도 수정 페이지
 @bp.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit_preferences():
-    # 매칭 선호도 조회 또는 기본값 설정
     preference = MatchingPreference.query.filter_by(user_id=current_user.id).first()
 
     if request.method == 'POST':
         # 폼 데이터 가져오기
-        preferred_genders = request.form.getlist('preferred_genders')
+        preferred_genders = ",".join(request.form.getlist('preferred_genders'))
         min_age = int(request.form.get('min_age', 18))
         max_age = int(request.form.get('max_age', 100))
 
-        # 입력값 검증
+        # 유효성 검사
         if min_age < 18 or max_age > 100 or min_age > max_age:
-            flash("Invalid age range. Please check your inputs.", "danger")
+            flash("Invalid age range. Please try again.", "danger")
             return redirect(url_for('preferences.edit_preferences'))
 
-        # 매칭 선호도 업데이트 또는 생성
         if not preference:
             preference = MatchingPreference(
                 user_id=current_user.id,
@@ -37,20 +35,19 @@ def edit_preferences():
             preference.max_age = max_age
 
         db.session.commit()
+        flash("Preferences updated successfully!", "success")
+        return redirect(url_for('main.home'))
 
-        flash("Preferences updated successfully.", "success")
-        return redirect(url_for('home.home'))
+    return render_template('users/preference.html', preference=preference)
 
-    return render_template('preferences_edit.html', preference=preference)
-
-# 매칭 선호도 보기
+# 선호도 보기
 @bp.route('/view', methods=['GET'])
 @login_required
 def view_preferences():
     preference = MatchingPreference.query.filter_by(user_id=current_user.id).first()
 
     if not preference:
-        flash("No matching preferences found. Please set your preferences.", "warning")
+        flash("No preferences set. Please update your preferences.", "warning")
         return redirect(url_for('preferences.edit_preferences'))
 
-    return render_template('preferences_view.html', preference=preference)
+    return render_template('users/preference.html', preference=preference)

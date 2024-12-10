@@ -29,7 +29,9 @@ def photo_filename(photo):
 
 @bp.route('/register', methods=['GET'])
 def register_form():
-    return render_template('auth/register.html')
+    from datetime import datetime
+    current_year = datetime.now().year
+    return render_template('auth/register.html', current_year=current_year)
 
 @bp.route('/register', methods=['POST'])
 def register():

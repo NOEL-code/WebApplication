@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Respond to Date Request</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <header class="response-header">
+        <a
+          href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}"
+        >
+          <img
+            src="{{ url_for('static', filename='images/profile_icon.png') }}"
+            alt="Profile"
+            class="icon"
+          />
+        </a>
+        <h1 class="title">{{ app_name }}</h1>
+        <a href="{{ url_for('preferences.edit_preferences') }}">
+          <img
+            src="{{ url_for('static', filename='images/settings_icon.png') }}"
+            alt="Settings"
+            class="icon"
+          />
+        </a>
+      </header>
+
+      <!-- Title Section -->
+      <h2 class="subtitle">Respond to Proposal</h2>
+      <p class="description">Choose whether to go on a date or not.</p>
+
+      <!-- Proposal Details -->
+      <div class="proposal-details">
+        <p><strong>From:</strong> {{ proposal.proposer.profile.first_name }}</p>
+        <p>
+          <strong>Date:</strong> {{ proposal.proposed_date.strftime('%Y-%m-%d
+          %H:%M') }}
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="response-buttons">
+        <form
+          method="POST"
+          action="{{ url_for('proposals.respond_proposal', proposal_id=proposal.id) }}"
+          class="response-form"
+        >
+          <button
+            type="submit"
+            name="status"
+            value="ACCEPTED"
+            class="btn btn-success"
+          >
+            ✅ Accept
+          </button>
+          <button
+            type="submit"
+            name="status"
+            value="REJECTED"
+            class="btn btn-danger"
+          >
+            ❌ Reject
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -13,16 +13,15 @@ class GenderEnum(PyEnum):
     OTHER = "other"
 
 class ProposalStatusEnum(PyEnum):
-    PROPOSED = "proposed"
-    ACCEPTED = "accepted"
-    REJECTED = "rejected"
-    IGNORED = "ignored"
-    RESCHEDULED = "rescheduled"
+    PROPOSED = "PROPOSED"
+    ACCEPTED = "ACCEPTED"
+    REJECTED = "REJECTED"
+    IGNORED = "IGNORED"
+    RESCHEDULED = "RESCHEDULED"
 
-# 다대다 관계 테이블 정의
-liked_users = Table(
+liked_users_table = Table(
     'liked_users',
-    db.metadata,  # metadata를 명시적으로 지정
+    db.metadata,
     db.Column('liker_id', Integer, ForeignKey('users.id'), primary_key=True),
     db.Column('liked_id', Integer, ForeignKey('users.id'), primary_key=True)
 )
@@ -34,6 +33,7 @@ blocked_users = Table(
     db.Column('blocked_id', Integer, ForeignKey('users.id'), primary_key=True)
 )
 
+# 사용자 모델
 # 사용자 모델
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -49,9 +49,9 @@ class User(db.Model, UserMixin):
     received_proposals = relationship("DateProposal", back_populates="recipient", foreign_keys="DateProposal.recipient_id")
     liked_users = relationship(
         'User',
-        secondary=liked_users,
-        primaryjoin=(liked_users.c.liker_id == id),
-        secondaryjoin=(liked_users.c.liked_id == id),
+        secondary=liked_users_table,  # Use liked_users_table instead of liked_users
+        primaryjoin=(liked_users_table.c.liker_id == id),
+        secondaryjoin=(liked_users_table.c.liked_id == id),
         backref='liked_by'
     )
     blocked_users = relationship(
@@ -61,7 +61,6 @@ class User(db.Model, UserMixin):
         secondaryjoin=(blocked_users.c.blocked_id == id),
         backref='blocked_by'
     )
-
 # 사용자 프로필 모델
 class Profile(db.Model):
     __tablename__ = 'profiles'
@@ -95,9 +94,6 @@ class DateProposal(db.Model):
     proposed_date = Column(Date, nullable=False)
     status = Column(Enum(ProposalStatusEnum, native_enum=False), default=ProposalStatusEnum.PROPOSED, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
-    responded_at = Column(DateTime, nullable=True)  # 응답 시간이 있을 경우 저장
-    proposal_message = Column(Text, nullable=True)  # 제안 메시지
-    response_message = Column(Text, nullable=True)  # 응답 메시지
 
     proposer = relationship("User", back_populates="sent_proposals", foreign_keys=[proposer_id])
     recipient = relationship("User", back_populates="received_proposals", foreign_keys=[recipient_id])

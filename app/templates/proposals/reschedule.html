@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <header class="reschedule-header">
+      <img src="{{ url_for('static', filename='images/profile_icon.png') }}" alt="Profile" class="icon">
+      <h1 class="title">{{ app_name }}</h1>
+      <img src="{{ url_for('static', filename='images/settings_icon.png') }}" alt="Settings" class="icon">
+    </header>
+
+    <!-- Back Button -->
+    <a href="{{ url_for('date_proposal') }}" class="back-button">
+      <img src="{{ url_for('static', filename='images/back_icon.png') }}" alt="Back">
+    </a>
+
+    <!-- Reschedule Section -->
+    <h2 class="subtitle">Date Reschedule</h2>
+    <p class="description">Choose an available time for a date.</p>
+    <form action="{{ url_for('submit_reschedule') }}" method="POST" class="reschedule-form">
+      <div class="form-group reservation-input">
+        <label for="reservation_time">
+          <span>📅</span> Reservation Time
+        </label>
+        <input type="datetime-local" name="reservation_time" id="reservation_time" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Complete</button>
+    </form>
+  </div>
+</body>
+</html>

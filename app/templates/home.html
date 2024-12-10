@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ page_title }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <header class="home-header">
+        <a
+          href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}"
+        >
+          <img
+            src="{{ url_for('static', filename='images/profile_icon.png') }}"
+            alt="Profile"
+            class="icon"
+          />
+        </a>
+        <h1 class="title">{{ app_name }}</h1>
+
+        <a href="{{ url_for('preferences.edit_preferences') }}">
+          <img
+            src="{{ url_for('static', filename='images/settings_icon.png') }}"
+            alt="Preferences"
+            class="icon"
+          />
+        </a>
+      </header>
+
+      <!-- Recommendation Section -->
+      <h2 class="subtitle">Recommended Dates for You</h2>
+      <div class="recommendation-section">
+        {% for person in recommendations %}
+        <div class="profile-card">
+          <div class="speech-bubble">Nice to meet you!</div>
+          <!-- Profile Image with Link -->
+          <a href="{{ url_for('profiles.view_profile', user_id=person.id) }}">
+            <img
+              src="{{ url_for('static', filename=person.image_url) }}"
+              alt="Profile"
+              class="profile-pic"
+            />
+          </a>
+          <p class="profile-name">{{ person.name }}</p>
+          <a
+            href="{{ url_for('proposals.create_proposal', recipient_id=person.id) }}"
+            class="btn btn-primary"
+          >
+            Propose a Date
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Buttons Section -->
+      <div class="buttons">
+        <a
+          href="{{ url_for('proposals.list_proposals') }}"
+          class="btn btn-primary"
+        >
+          <span>📅</span> Check Date Proposal
+        </a>
+        <a href="{{ url_for('likes.liked_users') }}" class="btn btn-secondary">
+          <span>❤️</span> Your Likes
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

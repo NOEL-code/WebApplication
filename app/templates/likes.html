@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section -->
+    <header class="likes-header">
+      <img src="{{ url_for('static', filename='images/profile_icon.png') }}" alt="Profile" class="icon">
+      <h1 class="title">{{ app_name }}</h1>
+      <img src="{{ url_for('static', filename='images/settings_icon.png') }}" alt="Settings" class="icon">
+    </header>
+
+    <!-- Title Section -->
+    <h2 class="subtitle">Your Likes</h2>
+
+    <!-- Liked Profiles Section -->
+    <div class="likes-section">
+      {% for person in liked_profiles %}
+      <div class="profile-card">
+        <div class="speech-bubble">Nice to meet you!</div>
+        <img src="{{ url_for('static', filename=person.image_url) }}" alt="Profile Image" class="profile-pic">
+        <div class="heart-icon">❤️</div>
+        <p class="profile-name">{{ person.name }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

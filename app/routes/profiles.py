@@ -8,17 +8,49 @@ bp = Blueprint('profiles', __name__, url_prefix='/profiles')
 @bp.route('/view/<int:user_id>', methods=['GET'])
 @login_required
 def view_profile(user_id):
+    # 사용자 프로필 조회
     profile = Profile.query.filter_by(user_id=user_id).first()
 
     if not profile:
         flash("Profile not found.", "danger")
-        return redirect(url_for('profiles.browse_profiles'))
+        return redirect(url_for('main.home'))
 
+    # user 객체 가져오기
+    user = User.query.get(user_id)
+    if not user:
+        flash("User not found.", "danger")
+        return redirect(url_for('main.home'))
+
+    # 템플릿에 profile과 user 전달
     return render_template(
-        'profiles/profile_view.html',
-        profile=profile
+        'users/users.html',
+        profile=profile,
+        user=user
     )
+    
+@bp.route('/view_my/<int:user_id>', methods=['GET'])
+@login_required
+def view_my_profile(user_id):
+    # 사용자 프로필 조회
+    profile = Profile.query.filter_by(user_id=user_id).first()
 
+    if not profile:
+        flash("Profile not found.", "danger")
+        return redirect(url_for('main.home'))
+
+    # user 객체 가져오기
+    user = User.query.get(user_id)
+    if not user:
+        flash("User not found.", "danger")
+        return redirect(url_for('main.home'))
+
+    # 템플릿에 profile과 user 전달
+    return render_template(
+        'users/user_profile.html',
+        profile=profile,
+        user=user
+    )    
+    
 # 프로필 생성 및 수정
 @bp.route('/edit', methods=['GET', 'POST'])
 @login_required
@@ -36,7 +68,7 @@ def edit_profile():
         # 입력값 검증
         if not first_name or not gender or not birth_year:
             flash("First name, gender, and birth year are required.", "danger")
-            return redirect(url_for('profiles.edit_profile'))
+            return redirect(url_for('main.home'))
 
         # 프로필 생성 또는 업데이트
         if not profile:
@@ -65,7 +97,7 @@ def edit_profile():
 
         return redirect(url_for('profiles.view_profile', user_id=current_user.id))
 
-    return render_template('profiles/profile_edit.html', profile=profile)
+    return render_template('users/user_profile.html', profile=profile)
 
 @bp.route('/browse', methods=['GET'])
 @login_required
@@ -111,9 +143,9 @@ def browse_profiles():
 
         if not profiles:
             flash("No profiles available to browse.", "warning")
-            return redirect(url_for('home.home'))
+            return redirect(url_for('main.home'))
 
         return render_template('profiles/browse_profiles.html', profiles=profiles)
     except Exception as e:
         flash(f"Error browsing profiles: {e}", "danger")
-        return redirect(url_for('home.home'))
+        return redirect(url_for('main.home'))

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ page_title if page_title else "Dine & Date" }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <header>
+        <h1 class="title">{{ app_name if app_name else "Dine & Date" }}</h1>
+      </header>
+
+      <!-- Image Section -->
+      <div class="image-section">
+        <img
+          src="{{ url_for('static', filename='images/dine_and_date.png') }}"
+          alt="Dine & Date"
+          class="main-image"
+        />
+      </div>
+
+      <!-- Description Section -->
+      <div class="description">
+        <p>{{ description if description else "Welcome to Dine & Date!" }}</p>
+      </div>
+
+      <!-- Buttons Section -->
+      <div class="buttons">
+        <a href="{{ url_for('auth.login_form') }}" class="btn btn-primary"
+          >Login</a
+        >
+        <a href="{{ url_for('auth.register_form') }}" class="btn btn-secondary"
+          >Create Account</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

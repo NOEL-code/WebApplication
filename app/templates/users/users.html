@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ page_title }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <style>
+      /* 스타일 추가 */
+      .icon {
+        width: 40px;
+        height: 40px;
+      }
+      .btn {
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background-color: #6a6acb;
+        color: #fff;
+      }
+      .btn-secondary {
+        background-color: #4caf50;
+        color: #fff;
+      }
+      .btn-danger {
+        background-color: #f44336;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <header class="profile-header">
+        <img
+          src="{{ url_for('static', filename='images/profile_icon.png') }}"
+          alt="Profile"
+          class="icon"
+        />
+        <h1 class="title">Dine & Date</h1>
+        <img
+          src="{{ url_for('static', filename='images/settings_icon.png') }}"
+          alt="Settings"
+          class="icon"
+        />
+      </header>
+
+      <!-- Profile Section -->
+      <div class="profile-container">
+        <div class="profile-image-section">
+          {% if profile.photo and profile.photo.file_extension %}
+          <img
+            src="{{ url_for('static', filename='photos/profile-' ~ profile.user_id ~ '.' ~ profile.photo.file_extension) }}"
+            alt="Profile Image"
+            class="profile-pic"
+          />
+          {% else %}
+          <img
+            src="{{ url_for('static', filename='images/default_profile.png') }}"
+            alt="Default Profile"
+            class="profile-pic"
+          />
+          {% endif %}
+        </div>
+        <div class="profile-info">
+          <div>
+            <input
+              type="text"
+              value="{{ profile.first_name }}"
+              placeholder="Username"
+              disabled
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              value="{{ profile.gender }}"
+              placeholder="Gender"
+              disabled
+            />
+          </div>
+          <div>
+            <input
+              type="text"
+              value="{{ profile.birth_year }}"
+              placeholder="Year"
+              disabled
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <!-- Action Buttons -->
+      <div class="profile-buttons">
+        <!-- Like Button -->
+        <!-- 좋아요 버튼 -->
+        <form
+          action="{{ url_for('likes.add_like', liked_id=profile.user_id) }}"
+          method="POST"
+          style="display: inline"
+        >
+          <button type="submit" class="btn btn-primary">❤️ Like</button>
+        </form>
+
+        <!-- Propose Button -->
+        <a
+          href="{{ url_for('proposals.create_proposal', recipient_id=profile.user_id) }}"
+          class="btn btn-secondary"
+        >
+          📅 Propose
+        </a>
+
+        <!-- Block Button -->
+        <a
+          href="{{ url_for('blocks_bp.block_user', blocked_id=profile.user_id) }}"
+          class="btn btn-danger"
+        >
+          🚫 Block
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

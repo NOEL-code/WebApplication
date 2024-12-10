@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Preferences</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Edit Preferences</h2>
+      <form method="POST">
+        <div class="form-group">
+          <label for="preferred_genders">Preferred Genders:</label><br />
+          <input type="checkbox" name="preferred_genders" value="male" {% if
+          'male' in (preference.preferred_genders or '') %} checked {% endif %}>
+          Male<br />
+          <input type="checkbox" name="preferred_genders" value="female" {% if
+          'female' in (preference.preferred_genders or '') %} checked {% endif
+          %}> Female<br />
+          <input type="checkbox" name="preferred_genders" value="other" {% if
+          'other' in (preference.preferred_genders or '') %} checked {% endif
+          %}> Other<br />
+        </div>
+        <div class="form-group">
+          <label for="min_age">Minimum Age:</label>
+          <input
+            type="number"
+            name="min_age"
+            value="{{ preference.min_age or 18 }}"
+            min="18"
+          />
+        </div>
+        <div class="form-group">
+          <label for="max_age">Maximum Age:</label>
+          <input
+            type="number"
+            name="max_age"
+            value="{{ preference.max_age or 100 }}"
+            max="100"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,828 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+}
+
+.container {
+  padding: 20px;
+}
+
+.title {
+  color: #6a4ff8;
+  font-size: 2.5em;
+  margin: 20px 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px 0;
+  text-decoration: none;
+  color: #fff;
+  background-color: #6a4ff8;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+/* Profile Image Section */
+.profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border: 2px solid #6a4ff8;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Form Styles */
+.form-section {
+  max-width: 400px;
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 5px;
+}
+
+textarea {
+  resize: none;
+}
+
+/* Image Section */
+.image-section {
+  margin: 20px 0;
+}
+
+.main-image {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Buttons Section */
+.buttons {
+  margin: 20px 0;
+}
+
+.btn-primary {
+  background-color: #6a4ff8;
+}
+
+.btn-secondary {
+  background-color: #818cf8;
+}
+
+/* Profile Form Container */
+.profile-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin-top: 30px;
+}
+
+/* Description Section */
+.description {
+  font-size: 1em;
+  color: #555;
+  margin: 20px 0;
+}
+
+/* Login Page Styles */
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.subtitle {
+  font-size: 1.5em;
+  color: #6a4ff8;
+  margin-bottom: 20px;
+}
+
+/* Header Section */
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+}
+
+/* Search Bar */
+.search-bar {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.search-bar input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 20px;
+  outline: none;
+}
+
+/* Recommendation Section */
+.recommendation-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.profile-card {
+  position: relative;
+  text-align: center;
+  margin: 10px;
+}
+
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #6a4ff8;
+  border-radius: 50%;
+}
+
+.profile-name {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #333;
+}
+
+.speech-bubble {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 2px solid #6a4ff8;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+/* Buttons Section */
+.buttons {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn span {
+  margin-right: 5px;
+}
+
+/* Header Section */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Profile Section */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin-top: 30px;
+}
+
+.profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border: 2px solid #6a4ff8;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Profile Information */
+.profile-info {
+  max-width: 400px;
+  width: 100%;
+}
+
+.profile-info .form-group {
+  margin-bottom: 15px;
+}
+
+.profile-info input, .profile-info textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  cursor: not-allowed;
+}
+
+.profile-info textarea {
+  resize: none;
+}
+
+/* Buttons Section */
+.buttons {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn-danger {
+  background-color: #ff4d4f;
+}
+
+.btn-danger:hover {
+  background-color: #e33b3b;
+}
+
+/* Header Section */
+.preferences-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Preferences Form Section */
+.preferences-form {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.preferences-form .form-group {
+  margin-bottom: 20px;
+}
+
+.preferences-form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Header Section */
+.proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Proposal Section */
+.proposal-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.proposal-card {
+  position: relative;
+  text-align: center;
+  margin: 10px;
+  width: 120px;
+}
+
+.proposal-card .profile-pic {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #6a4ff8;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.speech-bubble {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 2px solid #6a4ff8;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.proposal-status {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #333;
+}
+
+/* Header Section */
+.reschedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Back Button */
+.back-button {
+  display: inline-block;
+  margin: 20px 0;
+}
+
+.back-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Reschedule Form Section */
+.reschedule-form {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.reschedule-form .description {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.reservation-input {
+  margin-bottom: 20px;
+}
+
+.reservation-input label {
+  display: block;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.reservation-input input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Header Section */
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Back Button */
+.back-button {
+  display: inline-block;
+  margin: 20px 0;
+}
+
+.back-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Description Section */
+.description {
+  font-size: 1em;
+  color: #555;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Response Buttons Section */
+.response-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.response-form {
+  margin: 0;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: 2px solid #28a745;
+  color: #fff;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: 2px solid #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+/* Header Section */
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Search Bar */
+.search-bar {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.search-bar form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-bar input {
+  width: 70%;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+}
+
+.search-bar button {
+  padding: 10px;
+  font-size: 1.2em;
+  background-color: #6a4ff8;
+  color: #fff;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #5b3ce4;
+}
+
+/* Search Results Section */
+.search-results {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.profile-card {
+  position: relative;
+  text-align: center;
+  margin: 10px;
+  width: 120px;
+}
+
+.profile-card .profile-pic {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #6a4ff8;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.speech-bubble {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 2px solid #6a4ff8;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.profile-name {
+  margin-top: 10px;
+  font-size: 1em;
+  color: #333;
+}
+
+/* Header Section */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Back Button */
+.back-button {
+  display: inline-block;
+  margin: 20px 0;
+}
+
+.back-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Profile Section */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  margin-top: 30px;
+}
+
+.profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border: 2px solid #6a4ff8;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+/* Profile Information */
+.profile-info {
+  max-width: 400px;
+  width: 100%;
+}
+
+.profile-info .form-group {
+  margin-bottom: 15px;
+}
+
+.profile-info input, .profile-info textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  cursor: not-allowed;
+}
+
+.profile-info textarea {
+  resize: none;
+}
+
+/* Action Buttons Section */
+.profile-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.profile-buttons .btn {
+  width: 60px;
+  height: 60px;
+  font-size: 1.5em;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 50%;
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
+}
+
+.profile-buttons .btn-primary {
+  background-color: #6a4ff8;
+}
+
+.profile-buttons .btn-secondary {
+  background-color: #4caf50;
+}
+
+.profile-buttons .btn-danger {
+  background-color: #dc3545;
+}
+
+/* Header Section */
+.proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Back Button */
+.back-button {
+  display: inline-block;
+  margin: 20px 0;
+}
+
+.back-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Description Section */
+.description {
+  font-size: 1em;
+  color: #555;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Proposal Form Section */
+.proposal-form {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.proposal-form .reservation-input {
+  margin-bottom: 20px;
+}
+
+.proposal-form .reservation-input label {
+  display: block;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.proposal-form .reservation-input input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Header Section */
+.likes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Liked Profiles Section */
+.likes-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.profile-card {
+  position: relative;
+  text-align: center;
+  margin: 10px;
+  width: 120px;
+}
+
+.profile-card .profile-pic {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #6a4ff8;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.speech-bubble {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 2px solid #6a4ff8;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.heart-icon {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5em;
+  color: #ff4d4f;
+}
+
+.profile-name {
+  margin-top: 30px;
+  font-size: 1em;
+  color: #333;
+}
+
+/* Header Section */
+.blocked-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Back Button */
+.back-button {
+  display: inline-block;
+  margin: 20px 0;
+}
+
+.back-button img {
+  width: 30px;
+  height: 30px;
+}
+
+/* Blocked Users Section */
+.blocked-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.profile-card {
+  position: relative;
+  text-align: center;
+  margin: 10px;
+  width: 120px;
+}
+
+.profile-card .profile-pic {
+  width: 100px;
+  height: 100px;
+  border: 2px solid #6a4ff8;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.speech-bubble {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 2px solid #6a4ff8;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.block-icon {
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5em;
+  color: #dc3545;
+}
+
+.profile-name {
+  margin-top: 30px;
+  font-size: 1em;
+  color: #333;
+}
+

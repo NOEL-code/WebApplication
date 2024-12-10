@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Proposal</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <header class="proposal-header">
+        <img
+          src="{{ url_for('static', filename='images/profile_icon.png') }}"
+          alt="Profile"
+          class="icon"
+        />
+        <h1 class="title">{{ other_user.first_name }} - Propose a Date</h1>
+        <img
+          src="{{ url_for('static', filename='images/settings_icon.png') }}"
+          alt="Settings"
+          class="icon"
+        />
+      </header>
+
+      <!-- Back Button -->
+      <a href="{{ url_for('main.home') }}" class="back-button">
+        <img
+          src="{{ url_for('static', filename='images/back_icon.png') }}"
+          alt="Back"
+        />
+      </a>
+
+      <!-- Date Proposal Form -->
+      <h2 class="subtitle">Choose a Date</h2>
+      <p class="description">Select an available time for the date.</p>
+      <form
+        action="{{ url_for('proposals.create_proposal', recipient_id=other_user.id) }}"
+        method="POST"
+        class="proposal-form"
+      >
+        <div class="form-group reservation-input">
+          <label for="reservation_time">
+            <span>📅</span> Reservation Time
+          </label>
+          <input
+            type="datetime-local"
+            name="reservation_time"
+            id="reservation_time"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Complete</button>
+      </form>
+    </div>
+  </body>
+</html>

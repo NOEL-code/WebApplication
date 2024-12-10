@@ -25,10 +25,17 @@ def create_app():
     from app.routes.auth import bp as auth_bp
     from app.routes.profiles import bp as profiles_bp
     from app.routes.proposals import bp as proposals_bp
-    app.register_blueprint(proposals_bp)
-    app.register_blueprint(profiles_bp)
+    from app.routes.likes import bp as likes_bp
+    from app.routes.block import blocks_bp  # blocks 블루프린트 추가
+    from app.routes.preferences import bp as preferences_bp  # blocks 블루프린트 추가
+
+    app.register_blueprint(preferences_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(profiles_bp)
+    app.register_blueprint(proposals_bp)
+    app.register_blueprint(likes_bp)
+    app.register_blueprint(blocks_bp)  # blocks 블루프린트 등록
 
     # Create tables if not exist
     with app.app_context():
