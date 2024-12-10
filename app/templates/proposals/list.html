@@ -33,9 +33,36 @@
       </header>
 
       <!-- Title Section -->
-      <h2 class="subtitle">Received Proposals</h2>
-      <div class="proposals-section">
-        {% for proposal in proposals %}
+      <h2 class="subtitle">Proposals</h2>
+
+      <!-- Sent Proposals Section -->
+      <section class="proposals-section">
+        <h3>Sent Proposals</h3>
+        {% if sent_proposals %} {% for proposal in sent_proposals %}
+        <div class="proposal-card">
+          <img
+            src="{{ url_for('static', filename=proposal.recipient.profile.photo.image_url) }}"
+            alt="Profile Image"
+            class="profile-pic"
+          />
+          <p>
+            <strong>To:</strong> {{ proposal.recipient.profile.first_name }}
+          </p>
+          <p>
+            <strong>Date:</strong> {{ proposal.proposed_date.strftime('%Y-%m-%d
+            %H:%M') }}
+          </p>
+          <p><strong>Status:</strong> {{ proposal.status }}</p>
+        </div>
+        {% endfor %} {% else %}
+        <p>No sent proposals found.</p>
+        {% endif %}
+      </section>
+
+      <!-- Received Proposals Section -->
+      <section class="proposals-section">
+        <h3>Received Proposals</h3>
+        {% if received_proposals %} {% for proposal in received_proposals %}
         <div class="proposal-card">
           <img
             src="{{ url_for('static', filename=proposal.proposer.profile.photo.image_url) }}"
@@ -51,13 +78,15 @@
           </p>
           <p><strong>Status:</strong> {{ proposal.status }}</p>
           <a
-            href="{{ url_for('proposals.respond_proposal', proposal_id=proposal.id) }}"
+            href="{{ url_for('proposals.respond_to_proposal', proposal_id=proposal.id) }}"
             class="btn btn-primary"
             >Respond</a
           >
         </div>
-        {% endfor %}
-      </div>
+        {% endfor %} {% else %}
+        <p>No received proposals found.</p>
+        {% endif %}
+      </section>
     </div>
   </body>
 </html>

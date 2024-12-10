@@ -68,9 +68,16 @@ def respond_to_proposal(proposal_id):  # Renamed to respond_to_proposal
 
     return render_template('proposals/proposal_respond.html', proposal=proposal)
 
-# 데이트 제안 리스트 보기
 @bp.route('/list', methods=['GET'])
 @login_required
 def list_proposals():
-    received_proposals = DateProposal.query.filter(recipient_id=current_user.id, proposer_id=current_user).all()
-    return render_template('proposals/list.html', proposals=received_proposals)
+    # 내가 제안한 데이트
+    sent_proposals = DateProposal.query.filter_by(proposer_id=current_user.id).all()
+    # 내가 받은 데이트
+    received_proposals = DateProposal.query.filter_by(recipient_id=current_user.id).all()
+
+    return render_template(
+        'proposals/list.html',
+        sent_proposals=sent_proposals,
+        received_proposals=received_proposals
+    )

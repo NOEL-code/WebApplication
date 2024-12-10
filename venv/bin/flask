@@ -1,4 +1,4 @@
-#!/Users/yooseohyeon/Documents/GitHub/WebApplication/venv/bin/python3.11
+#!/Users/noel/WebApplication/venv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys
