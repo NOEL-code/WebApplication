@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app.models import db, User, DateProposal, ProposalStatusEnum
 from datetime import datetime
+from sqlalchemy import and_, or_
 
 bp = Blueprint('proposals', __name__, url_prefix='/proposals')
 
@@ -71,5 +72,5 @@ def respond_to_proposal(proposal_id):  # Renamed to respond_to_proposal
 @bp.route('/list', methods=['GET'])
 @login_required
 def list_proposals():
-    received_proposals = DateProposal.query.filter_by(recipient_id=current_user.id).all()
+    received_proposals = DateProposal.query.filter(recipient_id=current_user.id, proposer_id=current_user).all()
     return render_template('proposals/list.html', proposals=received_proposals)

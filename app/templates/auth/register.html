@@ -6,14 +6,14 @@
     <title>Register</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/register.css') }}"
+      href="{{ url_for('static', filename='styles.css') }}"
     />
   </head>
   <body>
     <div class="container">
       <!-- Header Section -->
       <header>
-        <h1 class="title">Dine & Date</h1>
+        <h1 class="title">{{ app_name if app_name else "Dine & Date" }}</h1>
       </header>
 
       <!-- Profile and Form Section -->
@@ -21,6 +21,7 @@
         <!-- Profile Image -->
         <div class="profile-image-section">
           <img
+            id="profilePreview"
             src="{{ url_for('static', filename='images/profile_placeholder.png') }}"
             alt="Profile"
             class="profile-image"
@@ -32,6 +33,7 @@
             name="photo"
             accept="image/jpeg, image/png"
             style="display: none"
+            onchange="previewPhoto(event)"
           />
         </div>
 
@@ -95,5 +97,17 @@
         </form>
       </div>
     </div>
+    <script>
+      function setThumbnail(event) {
+          var reader = new FileReader(); // FileReader 객체 생성
+  
+          reader.onload = function(event) {
+              var img = document.getElementById("profilePreview"); // 기존 이미지 요소 가져오기
+              img.setAttribute("src", event.target.result); // src 속성을 새 이미지 데이터로 변경
+          };
+  
+          reader.readAsDataURL(event.target.files[0]); // 파일을 Base64 데이터로 읽기
+      }
+  </script>
   </body>
 </html>

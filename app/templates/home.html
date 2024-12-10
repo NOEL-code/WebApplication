@@ -22,7 +22,7 @@
             class="icon"
           />
         </a>
-        <h1 class="title">{{ app_name }}</h1>
+        <h1 class="title">{{ app_name if app_name else "Dine & Date" }}</h1>
 
         <a href="{{ url_for('preferences.edit_preferences') }}">
           <img
@@ -38,7 +38,6 @@
       <div class="recommendation-section">
         {% for person in recommendations %}
         <div class="profile-card">
-          <div class="speech-bubble">Nice to meet you!</div>
           <!-- Profile Image with Link -->
           <a href="{{ url_for('profiles.view_profile', user_id=person.id) }}">
             <img
@@ -50,9 +49,10 @@
           <p class="profile-name">{{ person.name }}</p>
           <a
             href="{{ url_for('proposals.create_proposal', recipient_id=person.id) }}"
-            class="btn btn-primary"
+            class="btn btn-homedate no-wrap"
+            style="color: #6a4ff8;"
           >
-            Propose a Date
+            Let's date!
           </a>
         </div>
         {% endfor %}

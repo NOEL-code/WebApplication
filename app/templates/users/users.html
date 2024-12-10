@@ -99,31 +99,27 @@
 
       <!-- Action Buttons -->
       <!-- Action Buttons -->
-      <div class="profile-buttons">
-        <!-- Like Button -->
-        <!-- 좋아요 버튼 -->
+      <div class="profile-buttons-bar">
         <form
           action="{{ url_for('likes.add_like', liked_id=profile.user_id) }}"
           method="POST"
           style="display: inline"
         >
-          <button type="submit" class="btn btn-primary">❤️ Like</button>
+          <button type="submit" class="action-button">
+            ❤️
+          </button>
         </form>
-
-        <!-- Propose Button -->
         <a
           href="{{ url_for('proposals.create_proposal', recipient_id=profile.user_id) }}"
-          class="btn btn-secondary"
+          class="action-button"
         >
-          📅 Propose
+          📅
         </a>
-
-        <!-- Block Button -->
         <a
           href="{{ url_for('blocks_bp.block_user', blocked_id=profile.user_id) }}"
-          class="btn btn-danger"
+          class="action-button"
         >
-          🚫 Block
+          🚫
         </a>
       </div>
     </div>
