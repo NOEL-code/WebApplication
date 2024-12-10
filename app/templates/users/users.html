@@ -38,18 +38,32 @@
   <body>
     <div class="container">
       <!-- Header Section -->
-      <header class="profile-header">
-        <img
-          src="{{ url_for('static', filename='images/profile_icon.png') }}"
-          alt="Profile"
-          class="icon"
-        />
-        <h1 class="title">Dine & Date</h1>
-        <img
-          src="{{ url_for('static', filename='images/settings_icon.png') }}"
-          alt="Settings"
-          class="icon"
-        />
+      <header class="proposal-header">
+        <a
+          href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}"
+        >
+          <img
+            src="{{ url_for('static', filename='images/profile_icon.png') }}"
+            alt="Profile"
+            class="icon"
+          />
+        </a>
+        <h1 class="title">{{ app_name }}</h1>
+        <a href="{{ url_for('preferences.edit_preferences') }}">
+          <img
+            src="{{ url_for('static', filename='images/settings_icon.png') }}"
+            alt="Settings"
+            class="icon"
+          />
+        </a>
+        <!-- Back Button -->
+        <a href="{{ url_for('main.home') }}" class="back-button">
+          <img
+            src="{{ url_for('static', filename='images/back_icon.png') }}"
+            alt="Back"
+            class="icon"
+          />
+        </a>
       </header>
 
       <!-- Profile Section -->
@@ -98,30 +112,27 @@
       </div>
 
       <!-- Action Buttons -->
-      <!-- Action Buttons -->
       <div class="profile-buttons-bar">
-        <form
-          action="{{ url_for('likes.add_like', liked_id=profile.user_id) }}"
-          method="POST"
-          style="display: inline"
-        >
+        <!-- Like Button -->
+        <form action="{{ url_for('likes.add_like', liked_id=profile.user_id) }}" method="POST" style="display: inline;">
           <button type="submit" class="action-button">
             ❤️
           </button>
         </form>
-        <a
-          href="{{ url_for('proposals.create_proposal', recipient_id=profile.user_id) }}"
-          class="action-button"
-        >
+      
+        <!-- Propose Button -->
+        <a href="{{ url_for('proposals.create_proposal', recipient_id=profile.user_id) }}" class="action-button">
           📅
         </a>
-        <a
-          href="{{ url_for('blocks_bp.block_user', blocked_id=profile.user_id) }}"
-          class="action-button"
-        >
-          🚫
-        </a>
+      
+        <!-- Block Button -->
+        <form action="{{ url_for('blocks_bp.block_user', blocked_id=profile.user_id) }}" method="POST" style="display: inline;">
+          <button type="submit" class="action-button">
+            🚫
+          </button>
+        </form>
       </div>
     </div>
   </body>
 </html>
+

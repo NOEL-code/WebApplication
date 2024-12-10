@@ -30,11 +30,21 @@
             class="icon"
           />
         </a>
+        <!-- Back Button -->
+        <a href="{{ url_for('main.home') }}" class="back-button">
+          <img
+            src="{{ url_for('static', filename='images/back_icon.png') }}"
+            alt="Back"
+            class="icon"
+          />
+        </a>
       </header>
 
       <!-- Title Section -->
       <h2 class="subtitle">Proposals</h2>
 
+      
+      
       <!-- Sent Proposals Section -->
       <section class="proposals-section">
         <h3>Sent Proposals</h3>
@@ -69,14 +79,10 @@
             alt="Profile Image"
             class="profile-pic"
           />
-          <p>
-            <strong>From:</strong> {{ proposal.proposer.profile.first_name }}
-          </p>
-          <p>
-            <strong>Date:</strong> {{ proposal.proposed_date.strftime('%Y-%m-%d
-            %H:%M') }}
-          </p>
-          <p><strong>Status:</strong> {{ proposal.status }}</p>
+          <div class="proposal-info">
+            <p><strong>From:</strong> {{ proposal.proposer.profile.first_name }}</p>
+            <p><strong>Date:</strong> {{ proposal.proposed_date.strftime('%Y-%m-%d %H:%M') }}</p>
+            <p><strong>Status:</strong> {{ proposal.status }}</p>
           <a
             href="{{ url_for('proposals.respond_to_proposal', proposal_id=proposal.id) }}"
             class="btn btn-primary"

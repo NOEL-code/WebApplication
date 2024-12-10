@@ -33,6 +33,18 @@
         </a>
       </header>
 
+      <!-- Search Bar Section -->
+      <div class="search-bar">
+        <form method="GET">
+          <input
+            type="text"
+            name="query"
+            placeholder="🔍 Search for your date"
+            required
+          />
+        </form>
+      </div>
+
       <!-- Recommendation Section -->
       <h2 class="subtitle">Recommended Dates for You</h2>
       <div class="recommendation-section">
@@ -50,7 +62,6 @@
           <a
             href="{{ url_for('proposals.create_proposal', recipient_id=person.id) }}"
             class="btn btn-homedate no-wrap"
-            style="color: #6a4ff8;"
           >
             Let's date!
           </a>
@@ -62,7 +73,7 @@
       <div class="buttons">
         <a
           href="{{ url_for('proposals.list_proposals') }}"
-          class="btn btn-primary"
+          class="btn btn-secondary"
         >
           <span>📅</span> Check Date Proposal
         </a>

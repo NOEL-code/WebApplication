@@ -14,10 +14,11 @@ body {
 }
 
 .container {
-  width: 100%;
-  max-width: 800px;          /* 적절한 너비 제한 */
-  padding: 20px;
-  box-sizing: border-box;    /* 패딩 포함 폭 계산 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 수직 정렬 */
+  align-items: center; /* 수평 정렬 */
+  min-height: 100vh; /* 화면 전체 높이 사용 */
 }
 
 
@@ -39,29 +40,10 @@ body {
   cursor: pointer;
 }
 
-/* Profile Image Section */
-.profile-image-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.profile-image {
-  width: 150px;
-  height: 150px;
-  border: 2px solid #6a4ff8;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-
 /* Form Styles */
 .form-section {
-  max-width: 400px;
+  max-width: 800px;
   width: 100%;
-}
-
-.form-group {
-  margin-bottom: 15px;
 }
 
 input, select, textarea {
@@ -100,20 +82,29 @@ textarea {
 
 .buttons {
   display: flex;
-  flex-direction: row;    /* 버튼을 세로로 정렬 */
-  align-items: center;       /* 중앙 정렬 */
-  gap: 15px;                 /* 버튼 간격 */
+  flex-direction: row; /* 버튼을 가로로 정렬 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  gap: 30px; /* 버튼 간의 간격 */
   margin-top: 20px;
 }
+
 .btn-primary {
   background-color: #6a4ff8;
+  margin-bottom: 30px; /* 위 간격 추가 */
 }
 
 .btn-secondary {
   background-color: #6a4ff8;
 }
 
+.btn-danger {
+  background-color: #ff4d4f;
+}
 
+.btn-danger:hover {
+  background-color: #e33b3b;
+}
 /* Profile Form Container */
 .profile-form-container {
   display: flex;
@@ -123,6 +114,14 @@ textarea {
   margin-top: 30px;
 }
 
+.profile-image {
+  width: 200px; /* 원하는 너비로 설정 */
+  height: 200px; /* 원하는 높이로 설정 */
+  border: 2px solid #6a4ff8; /* 테두리 유지 */
+  border-radius: 50%; /* 둥근 프로필 이미지 */
+  margin-bottom: 20px; /* 이미지와 업로드 버튼 사이 간격 */
+  object-fit: cover; /* 이미지를 컨테이너에 맞게 조정 */
+}
 /* Description Section */
 .description {
   font-size: 2em;
@@ -140,7 +139,7 @@ textarea {
 .subtitle {
   font-size: 1.5em;
   color: #6a4ff8;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 /* Header Section */
@@ -157,27 +156,13 @@ textarea {
   margin: 0 20px;
 }
 
-/* Search Bar */
-.search-bar {
-  margin: 20px 0;
-  text-align: center;
-}
-
-.search-bar input {
-  width: 80%;
-  padding: 10px;
-  font-size: 1em;
-  border: 2px solid #6a4ff8;
-  border-radius: 20px;
-  outline: none;
-}
-
 /* Recommendation Section */
 .recommendation-section {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   margin: 20px 0;
+  gap: 20px; /* 카드 간격 추가 */
 }
 
 .profile-card {
@@ -219,20 +204,32 @@ textarea {
   z-index: 1; /* 말풍선이 다른 요소 위로 오도록 설정 */
 }
 
+
+/* Button */
+/* Button 스타일 수정 */
 .btn-homedate {
-  background-color: #fff;
-  border: 2px solid #6a4ff8; /* 이미지 테두리 */
+  padding: 10px 15px;
+  font-size: 0.9em;
+  color: #fff; /* 글자 색상을 흰색으로 설정 */
+  border: 2px solid #6a4ff8;
+  border-radius: 5px;
+  text-decoration: none; /* 밑줄 제거 */
+  text-align: center;
+  width: 100%; /* 버튼을 카드 너비에 맞춤 */
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  background-color: #6a4ff8; /* 버튼 배경색 설정 */
+  display: inline-block; /* 요소를 인라인 블록으로 설정 */
 }
 
+.btn-homedate:hover {
+  background-color: #fff; /* 호버 시 배경색 변경 */
+  color: #6a4ff8; /* 호버 시 글자 색상 변경 */
+  border-color: #6a4ff8; /* 테두리 유지 */
+}
 .no-wrap {
   white-space: nowrap; /* 줄바꿈 방지 */
 }
-/* Buttons Section */
-.buttons {
-  margin: 20px 0;
-  display: flex;
-  justify-content: space-around;
-}
+
 
 .btn span {
   margin-right: 5px;
@@ -246,13 +243,15 @@ textarea {
   margin-bottom: 40px;
 }
 
-/* Profile Section */
+
+
+/* Profile Information */
 .profile-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-  margin-top: 50px;
+  flex-direction: column; /* 세로 방향으로 정렬 */
+  align-items: center; /* 가운데 정렬 */
+  gap: 20px; /* 각 요소 간격 */
+  margin-top: 20px;
 }
 
 .profile-image-section {
@@ -261,61 +260,46 @@ textarea {
   align-items: center;
 }
 
-.profile-pic {
-  width: 150px;
-  height: 150px;
-  border: 2px solid #6a4ff8;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-
-/* Profile Information */
 .profile-info {
-  display: flex; /* Flexbox 사용 */
-  flex-direction: column; /* 세로로 정렬 */
-  align-items: center; /* 수평 중앙 정렬 */
-  gap: 20px; /* 입력 필드 간격 */
+  display: flex;
+  flex-direction: column; /* 필드를 세로 정렬 */
+  align-items: center; /* 모든 필드를 가운데 정렬 */
+  gap: 20px; /* 필드 간 간격 */
 }
 
-.profile-info .form-group {
+.form-group {
+  width: 100%; /* 필드의 전체 너비를 유지 */
+  display: flex;
+  flex-direction: column; /* 라벨과 입력 필드를 세로로 배치 */
+  align-items: center; /* 라벨과 입력 필드 가운데 정렬 */
   margin-bottom: 15px;
 }
 
-.profile-info input, .profile-info textarea {
-  width: 100%; /* 입력 필드의 가로 너비 */
-  max-width: 300px; /* 최대 너비 제한 */
-  height: 20px; /* 입력 필드 높이 */
-  padding: 10px; /* 내부 여백 */
-  font-size: 1em; /* 텍스트 크기 */
-  text-align: center; /* 텍스트 가로 중앙 정렬 */
-  display: flex; /* Flexbox 사용 */
-  align-items: center; /* 텍스트 세로 중앙 정렬 */
-  justify-content: center; /* Flexbox 가로 정렬 */
-  border: 2px solid #6a4ff8; /* 테두리 스타일 */
-  border-radius: 5px; /* 테두리 둥글게 */
-  background-color: #f9f9f9; /* 입력 필드 배경색 */
-  color: #333; /* 텍스트 색상 */
-  cursor: not-allowed; /* 비활성화된 상태 표시 */
+
+.profile-info label {
+  margin-bottom: 5px; /* 라벨과 입력 필드 사이 간격 */
+  display: block; /* 블록 형태로 라벨 표시 */
 }
 
-.profile-info textarea {
-  resize: none; /* 텍스트 영역 크기 조정 비활성화 */
-  height: auto; /* 텍스트 영역 높이를 자동 조정 */
+input, select, textarea {
+  width: 100%; /* 필드의 너비를 설정 */
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #6a4ff8;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  text-align: left; /* 텍스트는 왼쪽 정렬 */
 }
 
-/* Buttons Section */
-.buttons {
-  margin: 20px 0;
-  display: flex;
-  justify-content: space-around;
+textarea {
+  resize: none; /* 크기 조절 비활성화 */
+  height: 100px; /* 기본 높이 설정 */
 }
 
-.btn-danger {
-  background-color: #ff4d4f;
-}
-
-.btn-danger:hover {
-  background-color: #e33b3b;
+button {
+  width: 200px; /* 버튼의 고정된 너비 */
+  text-align: center;
 }
 
 /* Header Section */
@@ -346,14 +330,6 @@ textarea {
   outline: none;
 }
 
-/* Header Section */
-.proposal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
 /* Proposal Section */
 .proposal-section {
   display: flex;
@@ -363,18 +339,36 @@ textarea {
 }
 
 .proposal-card {
-  position: relative;
-  text-align: center;
-  margin: 10px;
-  width: 120px;
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  align-items: center; /* 수평 중앙 정렬 */
+  gap: 10px; /* 이미지와 텍스트 간 간격 */
+  padding: 15px;
+  border: 1px solid #ddd; /* 카드 테두리 */
+  border-radius: 10px; /* 둥근 모서리 */
+  width: 100%; /* 카드 너비 */
+  max-width: 300px; /* 최대 너비 */
+  margin: 10px auto; /* 가운데 정렬과 위아래 여백 */
+  background-color: #f9f9f9; /* 배경색 */
+  text-align: center; /* 텍스트 중앙 정렬 */
 }
 
 .proposal-card .profile-pic {
-  width: 100px;
+  width: 100px; /* 이미지 크기 */
   height: 100px;
-  border: 2px solid #6a4ff8;
-  border-radius: 50%;
-  margin-bottom: 10px;
+  border: 2px solid #6a4ff8; /* 테두리 색상 */
+  border-radius: 50%; /* 원형 이미지 */
+}
+
+.proposal-card .proposal-info {
+  margin-top: 10px; /* 이미지와 텍스트 간 간격 */
+}
+
+.proposal-card .proposal-info p {
+  margin: 5px 0; /* 텍스트 간 간격 */
+  font-size: 1em; /* 텍스트 크기 */
+  line-height: 1.5; /* 줄 간격 */
+  color: #333; /* 텍스트 색상 */
 }
 
 .speech-bubble {
@@ -405,9 +399,8 @@ textarea {
 }
 
 /* Back Button */
-.back-button {
-  display: inline-block;
-  margin: 20px 0;
+.back-button .icon {
+  margin-left: 10px; /* Back 아이콘만 왼쪽 간격 줄이기 */
 }
 
 .back-button img {
@@ -425,7 +418,7 @@ textarea {
 .reschedule-form .description {
   font-size: 1em;
   color: #555;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .reservation-input {
@@ -472,7 +465,7 @@ textarea {
   font-size: 2em;
   color: #555;
   text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 30px;
 }
 
 /* Response Buttons Section */
@@ -529,11 +522,11 @@ textarea {
 }
 
 .search-bar input {
-  width: 70%;
+  width: 100%;
   padding: 10px;
   font-size: 1em;
   border: 2px solid #6a4ff8;
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px;
   outline: none;
 }
 
@@ -612,53 +605,7 @@ textarea {
   height: 30px;
 }
 
-/* Profile Section */
-.profile-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-  margin-top: 30px;
-}
 
-.profile-image-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.profile-pic {
-  width: 150px;
-  height: 150px;
-  border: 2px solid #6a4ff8;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
-
-/* Profile Information */
-.profile-info {
-  max-width: 400px;
-  width: 100%;
-}
-
-.profile-info .form-group {
-  margin-bottom: 15px;
-}
-
-.profile-info input, .profile-info textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  border: 2px solid #6a4ff8;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  color: #333;
-  cursor: not-allowed;
-}
-
-.profile-info textarea {
-  resize: none;
-}
 
 /* Action Buttons Section */
 .profile-buttons {
@@ -692,45 +639,52 @@ textarea {
   background-color: #dc3545;
 }
 
+/* Profile Buttons Bar */
 .profile-buttons-bar {
   display: flex;
-  justify-content: space-around; /* 아이콘 간격을 균등 배치 */
-  align-items: center;
-  background-color: #6a4ff8; /* 바 배경색 */
-  padding: 10px; /* 바 여백 */
-  border-radius: 10px; /* 모서리를 둥글게 */
-  margin-top: 50px; /* 상단과의 간격 */
-  max-width: 400px; /* 바의 최대 너비 */
-  margin-left: auto;
-  margin-right: auto; /* 중앙 정렬 */
+  justify-content: center; /* 버튼을 중앙 정렬 */
+  align-items: center; /* 버튼 세로 정렬 */
+  gap: 30px; /* 버튼 간격 조정 */
+  background-color: #6a4ff8; /* 하단바 배경색 */
+  padding: 5px 15px; /* 패딩을 줄여서 두께 축소 */
+  border-radius: 10px; /* 둥근 모서리 추가 */
+  margin-top: 30px;
+  width: 80%; /* 너비 조정 */
 }
 
+/* Action Buttons */
 .action-button {
-  background: none; /* 버튼 배경 제거 */
+  background: none; /* 기본 배경 제거 */
   border: none; /* 기본 테두리 제거 */
-  font-size: 2em; /* 아이콘 크기 */
-  color: white; /* 아이콘 색상 */
-  cursor: pointer; /* 클릭 가능 표시 */
-  text-decoration: none; /* 밑줄 제거 */
+  font-size: 2em; /* 아이콘 크기 조정 */
+  color: #fff; /* 아이콘 색상 */
+  cursor: pointer; /* 클릭 포인터 표시 */
+  padding: 10px; /* 버튼 내부 여백 */
+  border-radius: 50%; /* 버튼 둥글게 */
+  transition: transform 0.2s; /* 클릭 효과 추가 */
 }
 
 .action-button:hover {
-  opacity: 0.8; /* 호버 시 약간 어두워지게 */
-  transform: scale(1.1); /* 호버 시 약간 확대 */
+  transform: scale(1.1); /* 호버 시 크기 확대 */
 }
 
-/* Header Section */
 .proposal-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: space-between; /* 아이콘과 제목 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  padding: 10px 20px; /* 헤더 전체 여백 */
+  position: relative; /* 헤더 자체를 문서 흐름에 따라 배치 */
 }
 
-/* Back Button */
+.proposal-header .icon {
+  width: 40px;
+  height: 40px;
+}
+
 .back-button {
-  display: inline-block;
-  margin: 20px 0;
+  position: relative; /* 백버튼도 문서 흐름에 따라 배치 */
+  margin: 20px auto 0 auto; /* 중앙 정렬 */
+  display: block; /* 블록 요소로 변경 */
 }
 
 .back-button img {
@@ -743,7 +697,7 @@ textarea {
   font-size: 2em;
   color: #555;
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 
 /* Proposal Form Section */
@@ -751,6 +705,7 @@ textarea {
   max-width: 400px;
   margin: 0 auto;
   text-align: center;
+  gap: 20px; /* 각 요소 간 간격 설정 */
 }
 
 .proposal-form .reservation-input {

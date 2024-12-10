@@ -78,4 +78,4 @@ def blocked_users_list():
     # 차단한 사용자 프로필 데이터 가져오기
     blocked_list = [User.query.get(row.blocked_id) for row in blocked_rows]
 
-    return render_template('blocked_users.html', blocked_users=blocked_list)
+    return render_template('blocks.html', blocked_users=blocked_list)

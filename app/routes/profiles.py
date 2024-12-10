@@ -1,7 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, request, render_template, redirect, url_for, flash, current_app
 from flask_login import login_required, current_user
-from app.models import db, User, Profile, DateProposal, blocked_users  # blocked_users import
+import os
+import pathlib
+from werkzeug.utils import secure_filename
+from app.models import db, Profile, Photo, User, DateProposal, blocked_users
 from sqlalchemy import or_
+
 bp = Blueprint('profiles', __name__, url_prefix='/profiles')
 
 # 특정 사용자 프로필 조회 및 렌더링
@@ -51,7 +55,28 @@ def view_my_profile(user_id):
         user=user
     )    
     
-# 프로필 생성 및 수정
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def ensure_photo_directory():
+    """Ensure the photo storage directory exists."""
+    directory = pathlib.Path(current_app.root_path) / "static" / "photos"
+    if not directory.exists():
+        directory.mkdir(parents=True)
+    return directory
+
+def save_photo(photo, profile_id):
+    """Save photo file to the server and return its relative path."""
+    ensure_photo_directory()
+    file_extension = photo.filename.rsplit('.', 1)[1].lower()
+    filename = f"profile-{profile_id}.{file_extension}"
+    photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+    photo.save(photo_path)
+    return f"photos/{filename}"
+
 @bp.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -63,31 +88,33 @@ def edit_profile():
         gender = request.form.get('gender')
         birth_year = request.form.get('birth_year')
         description = request.form.get('description', None)
-        photo_path = request.form.get('photo_path', None)
+        photo = request.files.get('photo')
 
         # 입력값 검증
         if not first_name or not gender or not birth_year:
             flash("First name, gender, and birth year are required.", "danger")
-            return redirect(url_for('main.home'))
+            return redirect(url_for('profiles.edit_profile'))
 
-        # 프로필 생성 또는 업데이트
-        if not profile:
-            profile = Profile(
-                user_id=current_user.id,
-                first_name=first_name,
-                gender=gender,
-                birth_year=birth_year,
-                description=description,
-                photo_path=photo_path
-            )
-            db.session.add(profile)
-        else:
-            profile.first_name = first_name
-            profile.gender = gender
-            profile.birth_year = birth_year
-            profile.description = description
-            profile.photo_path = photo_path
+        # 프로필 업데이트
+        profile.first_name = first_name
+        profile.gender = gender
+        profile.birth_year = birth_year
+        profile.description = description
 
+        # 사진 업로드 처리
+        if photo and allowed_file(photo.filename):
+            try:
+                relative_photo_path = save_photo(photo, profile.id)
+                profile.photo_path = relative_photo_path
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error saving photo: {e}", "danger")
+                return redirect(url_for('profiles.edit_profile'))
+        elif photo:
+            flash("Unsupported file type.", "danger")
+            return redirect(url_for('profiles.edit_profile'))
+
+        # 데이터베이스에 변경사항 저장
         try:
             db.session.commit()
             flash("Profile updated successfully.", "success")
@@ -95,14 +122,14 @@ def edit_profile():
             db.session.rollback()
             flash(f"Error updating profile: {e}", "danger")
 
-        return redirect(url_for('profiles.view_profile', user_id=current_user.id))
+        return redirect(url_for('main.home', user_id=current_user.id))
 
+    # GET 요청일 경우 프로필 편집 페이지 렌더링
     return render_template('users/user_profile.html', profile=profile)
 
 @bp.route('/browse', methods=['GET'])
 @login_required
 def browse_profiles():
-    from sqlalchemy import or_
 
     # 현재 사용자가 차단한 사용자 및 차단된 사용자 ID 가져오기
     blocked_user_ids = [

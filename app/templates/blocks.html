@@ -12,27 +12,33 @@
   <body>
     <div class="container">
       <!-- Header Section -->
-      <header class="blocked-header">
-        <img
-          src="{{ url_for('static', filename='images/profile_icon.png') }}"
-          alt="Profile"
-          class="icon"
-        />
+      <header class="proposal-header">
+        <a
+          href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}"
+        >
+          <img
+            src="{{ url_for('static', filename='images/profile_icon.png') }}"
+            alt="Profile"
+            class="icon"
+          />
+        </a>
         <h1 class="title">{{ app_name }}</h1>
-        <img
-          src="{{ url_for('static', filename='images/settings_icon.png') }}"
-          alt="Settings"
-          class="icon"
-        />
+        <a href="{{ url_for('preferences.edit_preferences') }}">
+          <img
+            src="{{ url_for('static', filename='images/settings_icon.png') }}"
+            alt="Settings"
+            class="icon"
+          />
+        </a>
+        <!-- Back Button -->
+        <a href="{{ url_for('main.home') }}" class="back-button">
+          <img
+            src="{{ url_for('static', filename='images/back_icon.png') }}"
+            alt="Back"
+            class="icon"
+          />
+        </a>
       </header>
-
-      <!-- Back Button -->
-      <a href="{{ url_for('main.home') }}" class="back-button">
-        <img
-          src="{{ url_for('static', filename='images/back_icon.png') }}"
-          alt="Back"
-        />
-      </a>
 
       <!-- Title Section -->
       <h2 class="subtitle">Blocked Users</h2>

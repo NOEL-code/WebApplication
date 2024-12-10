@@ -59,6 +59,8 @@ ENV/
 env/
 env.bak/
 venv.bak/
+venv/bin
+
 
 # Editor specific
 .vscode/

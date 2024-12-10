@@ -13,29 +13,35 @@
     <div class="container">
       <!-- Header Section -->
       <header class="proposal-header">
-        <img
-          src="{{ url_for('static', filename='images/profile_icon.png') }}"
-          alt="Profile"
-          class="icon"
-        />
-        <h1 class="title">{{ other_user.first_name }} - Propose a Date</h1>
-        <img
-          src="{{ url_for('static', filename='images/settings_icon.png') }}"
-          alt="Settings"
-          class="icon"
-        />
+        <a
+          href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}"
+        >
+          <img
+            src="{{ url_for('static', filename='images/profile_icon.png') }}"
+            alt="Profile"
+            class="icon"
+          />
+        </a>
+        <h1 class="title">{{ app_name }}</h1>
+        <a href="{{ url_for('preferences.edit_preferences') }}">
+          <img
+            src="{{ url_for('static', filename='images/settings_icon.png') }}"
+            alt="Settings"
+            class="icon"
+          />
+        </a>
+        <!-- Back Button -->
+        <a href="{{ url_for('main.home') }}" class="back-button">
+          <img
+            src="{{ url_for('static', filename='images/back_icon.png') }}"
+            alt="Back"
+            class="icon"
+          />
+        </a>
       </header>
 
-      <!-- Back Button -->
-      <a href="{{ url_for('main.home') }}" class="back-button">
-        <img
-          src="{{ url_for('static', filename='images/back_icon.png') }}"
-          alt="Back"
-        />
-      </a>
-
       <!-- Date Proposal Form -->
-      <h2 class="subtitle">Choose a Date</h2>
+      <h2 class="subtitle">Propose a Date</h2>
       <p class="description">Select an available time for the date.</p>
       <form
         action="{{ url_for('proposals.create_proposal', recipient_id=other_user.id) }}"
