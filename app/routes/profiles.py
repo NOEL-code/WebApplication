@@ -86,7 +86,7 @@ def edit_profile():
         if not first_name or not gender or not birth_year:
             flash("First name, gender, and birth year are required.", "danger")
             return redirect(url_for('profiles.edit_profile'))
-
+    
         # 프로필 업데이트
         profile.first_name = first_name
         profile.gender = GenderEnum[gender]  # 문자열을 Enum으로 변환

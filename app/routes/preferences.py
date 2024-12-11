@@ -30,12 +30,19 @@ def edit_preferences():
             )
             db.session.add(preference)
         else:
-            preference.preferred_genders = preferred_genders
+            preference.preferred_genders = preferred_genders if preferred_genders else ""
             preference.min_age = min_age
             preference.max_age = max_age
 
-        db.session.commit()
-        flash("Preferences updated successfully!", "success")
+        #db.session.commit()
+        #flash("Preferences updated successfully!", "success")
+                # 데이터베이스에 커밋
+        try:
+            db.session.commit()
+            flash("Preferences updated successfully!", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Error updating preferences: {e}", "danger")
         return redirect(url_for('main.home'))
 
     return render_template('users/preference.html', preference=preference)
