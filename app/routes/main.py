@@ -15,11 +15,9 @@ def intro():
 def home():
     query = request.args.get('query', '').strip()
 
-    # 매칭 선호도 조건 추가
     preference = current_user.matching_preference
     preferred_genders = preference.preferred_genders.split(',') if preference else []
 
-    # 차단된 사용자 목록 가져오기
     blocked_user_ids = [
         row.blocked_id for row in db.session.execute(
             blocked_users.select().where(blocked_users.c.blocker_id == current_user.id)
@@ -32,7 +30,6 @@ def home():
     ]
     excluded_user_ids = set(blocked_user_ids + blocked_by_user_ids)
 
-    # 추천 프로필 필터링
     profiles_query = Profile.query.filter(
         Profile.user_id.notin_(excluded_user_ids),
         Profile.user_id != current_user.id
@@ -46,7 +43,6 @@ def home():
 
     recommendations = profiles_query.all()
 
-    # 사진 경로 포함
     recommendation_data = []
     for profile in recommendations:
         if profile.photo and profile.photo.file_extension:

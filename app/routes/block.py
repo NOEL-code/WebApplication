@@ -2,10 +2,8 @@ from flask import Blueprint, redirect, url_for, flash, render_template
 from flask_login import login_required, current_user
 from app.models import db, User, blocked_users
 
-# 블루프린트 정의
 blocks_bp = Blueprint('blocks_bp', __name__, url_prefix='/blocks')
 
-# 사용자 차단
 @blocks_bp.route('/block/<int:blocked_id>', methods=['POST'])
 @login_required
 def block_user(blocked_id):
@@ -18,7 +16,6 @@ def block_user(blocked_id):
         flash("User not found.", "danger")
         return redirect(url_for('profiles.browse_profiles'))
 
-    # 이미 차단된 사용자인지 확인
     existing_block = db.session.execute(
         blocked_users.select().where(
             blocked_users.c.blocker_id == current_user.id,
@@ -29,7 +26,6 @@ def block_user(blocked_id):
     if existing_block:
         flash("You have already blocked this user.", "warning")
     else:
-        # 차단 추가
         db.session.execute(
             blocked_users.insert().values(blocker_id=current_user.id, blocked_id=blocked_id)
         )
@@ -38,11 +34,9 @@ def block_user(blocked_id):
 
     return redirect(url_for('profiles.browse_profiles'))
 
-# 차단 취소
 @blocks_bp.route('/unblock/<int:blocked_id>', methods=['POST'])
 @login_required
 def unblock_user(blocked_id):
-    # 차단 기록 확인
     existing_block = db.session.execute(
         blocked_users.select().where(
             blocked_users.c.blocker_id == current_user.id,
@@ -52,9 +46,8 @@ def unblock_user(blocked_id):
 
     if not existing_block:
         flash("You have not blocked this user.", "warning")
-        return redirect(url_for('blocks_bp.blocked_users'))
+        return redirect(url_for('blocks_bp.blocked_users_list'))
 
-    # 차단 취소
     db.session.execute(
         blocked_users.delete().where(
             blocked_users.c.blocker_id == current_user.id,
@@ -64,18 +57,34 @@ def unblock_user(blocked_id):
     db.session.commit()
 
     flash("Block removed successfully.", "success")
-    return redirect(url_for('blocks_bp.blocked_users'))
+    return redirect(url_for('blocks_bp.blocked_users_list'))
 
-# 차단한 사용자 목록 조회
 @blocks_bp.route('/list', methods=['GET'])
 @login_required
 def blocked_users_list():
-    # 현재 사용자가 차단한 사용자 목록 조회
     blocked_rows = db.session.execute(
         blocked_users.select().where(blocked_users.c.blocker_id == current_user.id)
     ).fetchall()
 
-    # 차단한 사용자 프로필 데이터 가져오기
-    blocked_list = [User.query.get(row.blocked_id) for row in blocked_rows]
+    blocked_list = []
+    for row in blocked_rows:
+        user = User.query.get(row.blocked_id)
+        if user:
+            if user.profile.photo and user.profile.photo.file_extension:
+                image_url = url_for(
+                    'static', filename=f"photos/photo-{user.profile.user_id}.{user.profile.photo.file_extension}"
+                )
+            else:
+                image_url = url_for('static', filename="images/default_profile.png")
+            blocked_list.append({
+                "id": user.id,
+                "name": user.profile.first_name,
+                "image_url": image_url,
+            })
 
-    return render_template('blocks.html', blocked_users=blocked_list)
+    return render_template(
+        'blocks.html',
+        page_title="Blocked Users",
+        app_name="Dine & Date",
+        blocked_users=blocked_list,
+    )

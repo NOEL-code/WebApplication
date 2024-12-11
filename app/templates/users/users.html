@@ -37,10 +37,6 @@
         cursor: pointer;
         font-size: 14px;
       }
-      .btn-primary {
-        background-color: #6a6acb;
-        color: #fff;
-      }
       .btn-secondary {
         background-color: #4caf50;
         color: #fff;
@@ -73,13 +69,12 @@
       }
       .action-button {
         display: inline-block;
-        padding: 10px 15px;
+        padding: 10px 5px;
         margin: 5px;
-        font-size: 16px;
+        font-size: 14px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        background-color: #6a6acb;
         color: white;
         text-decoration: none;
       }
@@ -139,6 +134,12 @@
           <input
             type="text"
             value="{{ profile.first_name }}"
+            placeholder="Username"
+            disabled
+          />
+          <input
+            type="text"
+            value="{{ profile.description }}"
             placeholder="Username"
             disabled
           />

@@ -46,7 +46,6 @@ def add_like(liked_id):
 @bp.route('/remove/<int:liked_id>', methods=['POST'])
 @login_required
 def remove_like(liked_id):
-    # 좋아요 삭제
     db.session.execute(
         liked_users_table.delete().where(
             and_(

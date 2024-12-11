@@ -59,7 +59,6 @@ def view_my_profile(user_id):
         flash("Profile not found.", "danger")
         return redirect(url_for('main.home'))
 
-    # 프로필 이미지 경로 생성
     photo_path = None
     if profile.photo and profile.photo.file_extension:
         photo_path = url_for('static', filename=f"photos/photo-{profile.id}.{profile.photo.file_extension}")
@@ -114,7 +113,6 @@ def edit_profile():
 @bp.route('/browse', methods=['GET'])
 @login_required
 def browse_profiles():
-    # 현재 사용자가 차단한 사용자 및 차단된 사용자 ID 가져오기
     blocked_user_ids = [
         row.blocked_id for row in db.session.execute(
             blocked_users.select().where(blocked_users.c.blocker_id == current_user.id)
@@ -126,10 +124,8 @@ def browse_profiles():
         ).fetchall()
     ]
 
-    # 차단 관계에 있는 사용자 목록
     excluded_user_ids = set(blocked_user_ids + blocked_by_user_ids)
 
-    # 현재 사용자가 이미 데이트 제안을 주고받은 사용자 ID 가져오기
     proposal_user_ids = [
         proposal.proposer_id if proposal.recipient_id == current_user.id else proposal.recipient_id
         for proposal in DateProposal.query.filter(
@@ -140,7 +136,6 @@ def browse_profiles():
         ).all()
     ]
 
-    # 최종 제외할 사용자 ID (차단 + 제안 관계)
     excluded_user_ids.update(proposal_user_ids)
     excluded_user_ids = list(excluded_user_ids)  # 리스트로 변환
 

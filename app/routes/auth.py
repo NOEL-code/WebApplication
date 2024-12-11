@@ -30,7 +30,6 @@ def register_form():
 
 @bp.route('/register_photo', methods=['POST'])
 def register_photo():
-    print("회원가입 시작")
     email = request.form.get('email')
     password = request.form.get('password')
     first_name = request.form.get('first_name')
@@ -66,12 +65,10 @@ def register_photo():
         ensure_photo_directory()
         file_extension = photo.filename.rsplit('.', 1)[1].lower()
 
-        # 데이터베이스에 저장
         photo_obj = Photo(file_extension=file_extension, profile_id=default_profile.id)
         db.session.add(photo_obj)
         db.session.commit()
 
-        # 사진 저장 경로 생성
         photo_path = photo_filename(photo_obj)
         try:
             photo.save(photo_path)
@@ -116,12 +113,3 @@ def logout():
     logout_user()
     flash("Logout successful.", "success")
     return redirect(url_for('auth.login_form'))
-
-@bp.route('/current-user', methods=['GET'])
-@login_required
-def current_user_info():
-    return jsonify({
-        "user_id": current_user.id,
-        "email": current_user.email,
-        "created_at": current_user.created_at
-    }), 200

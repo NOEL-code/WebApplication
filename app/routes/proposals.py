@@ -6,7 +6,6 @@ from sqlalchemy import and_, or_
 
 bp = Blueprint('proposals', __name__, url_prefix='/proposals')
 
-# 데이트 제안 생성
 @bp.route('/create/<int:recipient_id>', methods=['GET', 'POST'])
 @login_required
 def create_proposal(recipient_id):
@@ -21,7 +20,6 @@ def create_proposal(recipient_id):
             flash("Reservation time is required.", "danger")
             return redirect(url_for('proposals.create_proposal', recipient_id=recipient_id))
 
-        # 제안 생성
         new_proposal = DateProposal(
             proposer_id=current_user.id,
             recipient_id=recipient_id,
@@ -36,13 +34,11 @@ def create_proposal(recipient_id):
 
     return render_template('proposals/reservation.html', other_user=recipient)
 
-# 데이트 제안 응답
 @bp.route('/respond/<int:proposal_id>', methods=['GET', 'POST'])
 @login_required
 def respond_to_proposal(proposal_id):  # Renamed to respond_to_proposal
     proposal = DateProposal.query.get(proposal_id)
 
-    # 제안 유효성 검증
     if not proposal:
         flash("Proposal not found.", "danger")
         return redirect(url_for('proposals.list_proposals'))
@@ -58,7 +54,6 @@ def respond_to_proposal(proposal_id):  # Renamed to respond_to_proposal
             flash("Invalid status.", "danger")
             return redirect(url_for('proposals.respond_to_proposal', proposal_id=proposal_id))
 
-        # 상태 업데이트
         proposal.status = status
         proposal.responded_at = datetime.utcnow()
         db.session.commit()
@@ -71,7 +66,6 @@ def respond_to_proposal(proposal_id):  # Renamed to respond_to_proposal
 @bp.route('/list', methods=['GET'])
 @login_required
 def list_proposals():
-    # 내가 제안한 데이트
     sent_proposals = []
     for proposal in DateProposal.query.filter_by(proposer_id=current_user.id).all():
         recipient_profile = proposal.recipient.profile
@@ -88,7 +82,6 @@ def list_proposals():
             "status": proposal.status.value,
         })
 
-    # 내가 받은 데이트
     received_proposals = []
     for proposal in DateProposal.query.filter_by(recipient_id=current_user.id).all():
         proposer_profile = proposal.proposer.profile

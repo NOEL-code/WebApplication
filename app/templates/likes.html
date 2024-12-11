@@ -9,6 +9,129 @@
       href="{{ url_for('static', filename='styles.css') }}"
     />
   </head>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .container {
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    /* Header Styles */
+    .proposal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .proposal-header .icon {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0;
+      color: #6a6acb;
+    }
+
+    /* Section Title */
+    .title-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: #555;
+      margin: 0;
+    }
+
+    /* Profile Card Styles */
+    .likes-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .profile-card {
+      background-color: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-link {
+      text-decoration: none;
+    }
+
+    .profile-pic {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .profile-name {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      margin: 5px 0;
+    }
+
+    /* Remove Like Button */
+    .remove-like-form {
+      margin-top: 10px;
+    }
+
+    .action-button {
+      background-color: #f44336;
+      color: #fff;
+      padding: 8px 8px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      width: 80px;
+      transition: background-color 0.3s ease;
+    }
+
+    .action-button:hover {
+      background-color: #d32f2f;
+    }
+
+    /* No Likes Message */
+    .no-likes-message {
+      text-align: center;
+      font-size: 16px;
+      color: #999;
+      margin-top: 20px;
+    }
+  </style>
   <body>
     <div class="container">
       <!-- Header Section -->
@@ -40,32 +163,40 @@
       </header>
 
       <!-- Title Section -->
-      <h2 class="subtitle">Your Likes</h2>
+      <section class="title-section">
+        <h2 class="subtitle">Your Likes</h2>
+      </section>
 
       <!-- Liked Profiles Section -->
-      <div class="likes-section">
+      <section class="likes-section">
         {% for person in liked_profiles %}
         <div class="profile-card">
-          <!-- 프로필 이미지 -->
-          <a href="{{ url_for('profiles.view_profile', user_id=person.id) }}">
+          <!-- Profile Image -->
+          <a
+            href="{{ url_for('profiles.view_profile', user_id=person.id) }}"
+            class="profile-link"
+          >
             <img
               src="{{ url_for('static', filename=person.image_url if person.image_url else 'images/default_profile.png') }}"
               alt="Profile"
               class="profile-pic"
             />
           </a>
+          <!-- Profile Name -->
           <p class="profile-name">{{ person.name }}</p>
-          <!-- 좋아요 취소 -->
+          <!-- Remove Like Button -->
           <form
             action="{{ url_for('likes.remove_like', liked_id=person.id) }}"
             method="POST"
-            style="display: inline"
+            class="remove-like-form"
           >
-            <button type="submit" class="action-button">❤️ Remove Like</button>
+            <button type="submit" class="action-button">Remove</button>
           </form>
         </div>
+        {% else %}
+        <p class="no-likes-message">You haven't liked anyone yet.</p>
         {% endfor %}
-      </div>
+      </section>
     </div>
   </body>
 </html>

@@ -22,7 +22,7 @@
             class="icon"
           />
         </a>
-        <h1 class="title">{{ app_name }}</h1>
+        <h1 class="title">{{ app_name if app_name else "Dine & Date" }}</h1>
         <a href="{{ url_for('preferences.edit_preferences') }}">
           <img
             src="{{ url_for('static', filename='images/settings_icon.png') }}"
@@ -30,7 +30,6 @@
             class="icon"
           />
         </a>
-        <!-- Back Button -->
         <a href="{{ url_for('main.home') }}" class="back-button">
           <img
             src="{{ url_for('static', filename='images/back_icon.png') }}"
@@ -47,16 +46,26 @@
       <div class="blocked-section">
         {% for person in blocked_users %}
         <div class="profile-card">
-          <div class="speech-bubble">Nice to meet you!</div>
-          <img
-            src="{{ url_for('static', filename=person.image_url) }}"
-            alt="Profile Image"
-            class="profile-pic"
-          />
-          <div class="block-icon">🚫</div>
+          <a href="{{ url_for('profiles.view_profile', user_id=person.id) }}">
+            <img
+              src="{{ person.image_url }}"
+              alt="Profile Image"
+              class="profile-pic"
+            />
+          </a>
           <p class="profile-name">{{ person.name }}</p>
+          <!-- Unblock Button -->
+          <form
+            action="{{ url_for('blocks_bp.unblock_user', blocked_id=person.id) }}"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit" class="btn btn-danger">Unblock</button>
+          </form>
         </div>
-        {% endfor %}
+        {% endfor %} {% if not blocked_users %}
+        <p>You have not blocked anyone.</p>
+        {% endif %}
       </div>
     </div>
   </body>
