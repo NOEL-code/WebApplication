@@ -11,6 +11,16 @@
   </head>
   <body>
     <div class="container">
+      <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=True) %} {% if
+        messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+          <div class="flash-message {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %} {% endwith %}
+      </div>
       <!-- Header Section -->
       <header>
         <h1 class="title">{{ app_name if app_name else "Dine & Date" }}</h1>
@@ -99,15 +109,15 @@
     </div>
     <script>
       function setThumbnail(event) {
-          var reader = new FileReader(); // FileReader 객체 생성
-  
-          reader.onload = function(event) {
-              var img = document.getElementById("profilePreview"); // 기존 이미지 요소 가져오기
-              img.setAttribute("src", event.target.result); // src 속성을 새 이미지 데이터로 변경
-          };
-  
-          reader.readAsDataURL(event.target.files[0]); // 파일을 Base64 데이터로 읽기
+        var reader = new FileReader(); // FileReader 객체 생성
+
+        reader.onload = function (event) {
+          var img = document.getElementById("profilePreview"); // 기존 이미지 요소 가져오기
+          img.setAttribute("src", event.target.result); // src 속성을 새 이미지 데이터로 변경
+        };
+
+        reader.readAsDataURL(event.target.files[0]); // 파일을 Base64 데이터로 읽기
       }
-  </script>
+    </script>
   </body>
 </html>

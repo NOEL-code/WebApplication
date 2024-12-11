@@ -43,8 +43,7 @@
       <!-- Title Section -->
       <h2 class="subtitle">Proposals</h2>
 
-      
-      
+      <!-- Sent Proposals Section -->
       <!-- Sent Proposals Section -->
       <section class="proposals-section">
         <h3>Sent Proposals</h3>
@@ -62,7 +61,7 @@
             <strong>Date:</strong> {{ proposal.proposed_date.strftime('%Y-%m-%d
             %H:%M') }}
           </p>
-          <p><strong>Status:</strong> {{ proposal.status }}</p>
+          <p><strong>Status:</strong> {{ proposal.status.value }}</p>
         </div>
         {% endfor %} {% else %}
         <p>No sent proposals found.</p>
@@ -80,14 +79,20 @@
             class="profile-pic"
           />
           <div class="proposal-info">
-            <p><strong>From:</strong> {{ proposal.proposer.profile.first_name }}</p>
-            <p><strong>Date:</strong> {{ proposal.proposed_date.strftime('%Y-%m-%d %H:%M') }}</p>
-            <p><strong>Status:</strong> {{ proposal.status }}</p>
-          <a
-            href="{{ url_for('proposals.respond_to_proposal', proposal_id=proposal.id) }}"
-            class="btn btn-primary"
-            >Respond</a
-          >
+            <p>
+              <strong>From:</strong> {{ proposal.proposer.profile.first_name }}
+            </p>
+            <p>
+              <strong>Date:</strong> {{
+              proposal.proposed_date.strftime('%Y-%m-%d %H:%M') }}
+            </p>
+            <p><strong>Status:</strong> {{ proposal.status.value }}</p>
+            <a
+              href="{{ url_for('proposals.respond_to_proposal', proposal_id=proposal.id) }}"
+              class="btn btn-primary"
+              >Respond</a
+            >
+          </div>
         </div>
         {% endfor %} {% else %}
         <p>No received proposals found.</p>

@@ -66,7 +66,7 @@ def respond_to_proposal(proposal_id):  # Renamed to respond_to_proposal
         flash("Response submitted successfully.", "success")
         return redirect(url_for('proposals.list_proposals'))
 
-    return render_template('proposals/proposal_respond.html', proposal=proposal)
+    return render_template('proposals/response.html', proposal=proposal)
 
 @bp.route('/list', methods=['GET'])
 @login_required

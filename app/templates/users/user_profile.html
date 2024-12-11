@@ -87,14 +87,14 @@
           <div class="form-group">
             <label for="gender">Gender</label>
             <select id="gender" name="gender" required>
-              <option value="MALE" {% if profile.gender == "MALE" %}selected{% endif %}>
-                Male
+              <option value="MALE" {% if profile.gender.value == "male" %} selected{% endif %}>
+                MALE
               </option>
-              <option value="FEMALE" {% if profile.gender == "FEMALE" %}selected{% endif %}>
-                Female
+              <option value="FEMALE" {% if profile.gender.value == "female" %}selected{% endif %}>
+                FEMALE
               </option>
-              <option value="OTHER" {% if profile.gender == "OTHER" %}selected{% endif %}>
-                Other
+              <option value="OTHER" {% if profile.gender.value == "other" %}selected{% endif %}>
+                OTHER
               </option>
             </select>
           </div>
