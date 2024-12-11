@@ -70,16 +70,19 @@ def liked_users():
     ).fetchall()
 
     # Retrieve profiles for liked users
-    liked_profiles = [User.query.get(row.liked_id).profile for row in liked_rows]
+    liked_profiles = []
+    for row in liked_rows:
+        user = User.query.get(row.liked_id)
+        if user and user.profile:
+            profile = user.profile
+            image_url = f"photos/photo-{profile.user_id}.{profile.photo.file_extension}" if profile.photo else "images/default_profile.png"
+            liked_profiles.append({
+                "id": profile.user_id,
+                "name": profile.first_name,
+                "image_url": image_url
+            })
 
     return render_template(
         'likes.html',
-        liked_profiles=[
-            {
-                "id": profile.user_id,
-                "name": profile.first_name,
-                "image_url": f"photos/profile-{profile.user_id}.jpg"
-            }
-            for profile in liked_profiles
-        ]
+        liked_profiles=liked_profiles
     )

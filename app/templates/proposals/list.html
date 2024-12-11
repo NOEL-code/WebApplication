@@ -30,7 +30,6 @@
             class="icon"
           />
         </a>
-        <!-- Back Button -->
         <a href="{{ url_for('main.home') }}" class="back-button">
           <img
             src="{{ url_for('static', filename='images/back_icon.png') }}"
@@ -44,24 +43,21 @@
       <h2 class="subtitle">Proposals</h2>
 
       <!-- Sent Proposals Section -->
-      <!-- Sent Proposals Section -->
       <section class="proposals-section">
         <h3>Sent Proposals</h3>
         {% if sent_proposals %} {% for proposal in sent_proposals %}
         <div class="proposal-card">
           <img
-            src="{{ url_for('static', filename=proposal.recipient.profile.photo.image_url) }}"
+            src="{{ url_for('static', filename=proposal.recipient_image_url if proposal.recipient_image_url else 'images/default_profile.png') }}"
             alt="Profile Image"
             class="profile-pic"
           />
-          <p>
-            <strong>To:</strong> {{ proposal.recipient.profile.first_name }}
-          </p>
+          <p><strong>To:</strong> {{ proposal.recipient_name }}</p>
           <p>
             <strong>Date:</strong> {{ proposal.proposed_date.strftime('%Y-%m-%d
             %H:%M') }}
           </p>
-          <p><strong>Status:</strong> {{ proposal.status.value }}</p>
+          <p><strong>Status:</strong> {{ proposal.status }}</p>
         </div>
         {% endfor %} {% else %}
         <p>No sent proposals found.</p>
@@ -74,19 +70,17 @@
         {% if received_proposals %} {% for proposal in received_proposals %}
         <div class="proposal-card">
           <img
-            src="{{ url_for('static', filename=proposal.proposer.profile.photo.image_url) }}"
+            src="{{ url_for('static', filename=proposal.proposer_image_url if proposal.proposer_image_url else 'images/default_profile.png') }}"
             alt="Profile Image"
             class="profile-pic"
           />
           <div class="proposal-info">
-            <p>
-              <strong>From:</strong> {{ proposal.proposer.profile.first_name }}
-            </p>
+            <p><strong>From:</strong> {{ proposal.proposer_name }}</p>
             <p>
               <strong>Date:</strong> {{
               proposal.proposed_date.strftime('%Y-%m-%d %H:%M') }}
             </p>
-            <p><strong>Status:</strong> {{ proposal.status.value }}</p>
+            <p><strong>Status:</strong> {{ proposal.status }}</p>
             <a
               href="{{ url_for('proposals.respond_to_proposal', proposal_id=proposal.id) }}"
               class="btn btn-primary"

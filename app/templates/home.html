@@ -35,13 +35,15 @@
 
       <!-- Search Bar Section -->
       <div class="search-bar">
-        <form method="GET">
+        <form method="GET" action="{{ url_for('main.home') }}">
           <input
             type="text"
             name="query"
+            value="{{ query }}"
             placeholder="🔍 Search for your date"
             required
           />
+          <button type="submit" class="btn btn-primary">Search</button>
         </form>
       </div>
 
@@ -53,8 +55,8 @@
           <!-- Profile Image with Link -->
           <a href="{{ url_for('profiles.view_profile', user_id=person.id) }}">
             <img
-              src="{{ url_for('static', filename=person.image_url) }}"
-              alt="Profile"
+              src="{{ person.image_url }}"
+              alt="Profile Image"
               class="profile-pic"
             />
           </a>
@@ -66,7 +68,9 @@
             Let's date!
           </a>
         </div>
-        {% endfor %}
+        {% endfor %} {% if not recommendations %}
+        <p>No profiles found matching your search.</p>
+        {% endif %}
       </div>
 
       <!-- Buttons Section -->

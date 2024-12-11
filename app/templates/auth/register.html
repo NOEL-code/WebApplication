@@ -29,31 +29,32 @@
       <!-- Profile and Form Section -->
       <div class="profile-form-container">
         <!-- Profile Image -->
-        <div class="profile-image-section">
-          <img
-            id="profilePreview"
-            src="{{ url_for('static', filename='images/profile_placeholder.png') }}"
-            alt="Profile"
-            class="profile-image"
-          />
-          <label for="photo" class="btn btn-primary">Upload photo</label>
-          <input
-            type="file"
-            id="photo"
-            name="photo"
-            accept="image/jpeg, image/png"
-            style="display: none"
-            onchange="previewPhoto(event)"
-          />
-        </div>
 
         <!-- Form Section -->
         <form
-          action="{{ url_for('auth.register') }}"
+          action="{{ url_for('auth.register_photo') }}"
           method="POST"
           enctype="multipart/form-data"
           class="form-section"
         >
+          <div class="profile-image-section">
+            <img
+              id="profilePreview"
+              src="{{ photo_path if photo_path else url_for('static', filename='images/profile_icon.png') }}"
+              alt="Profile Image"
+              class="profile-image"
+            />
+            <label for="photo" class="btn btn-primary">Upload photo</label>
+            <input
+              type="file"
+              id="photo"
+              name="photo"
+              accept="image/jpeg, image/png"
+              style="display: none"
+              onchange="setThumbnail(event)"
+            />
+          </div>
+
           <div class="form-group">
             <input
               type="email"
@@ -108,6 +109,7 @@
       </div>
     </div>
     <script>
+      // 미리보기 처리 함수
       function setThumbnail(event) {
         var reader = new FileReader(); // FileReader 객체 생성
 
@@ -116,7 +118,10 @@
           img.setAttribute("src", event.target.result); // src 속성을 새 이미지 데이터로 변경
         };
 
-        reader.readAsDataURL(event.target.files[0]); // 파일을 Base64 데이터로 읽기
+        // 선택한 파일을 Base64 데이터로 읽기
+        if (event.target.files && event.target.files[0]) {
+          reader.readAsDataURL(event.target.files[0]);
+        }
       }
     </script>
   </body>

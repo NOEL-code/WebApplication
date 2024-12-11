@@ -24,7 +24,7 @@ def save_photo(photo, profile_id):
     """Save photo file to the server and return its relative path."""
     ensure_photo_directory()
     file_extension = photo.filename.rsplit('.', 1)[1].lower()
-    filename = f"profile-{profile_id}.{file_extension}"
+    filename = f"photo-{profile_id}.{file_extension}"
     photo_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
     photo.save(photo_path)
     return f"photos/{filename}"
@@ -38,16 +38,17 @@ def view_profile(user_id):
         flash("Profile not found.", "danger")
         return redirect(url_for('main.home'))
 
-    user = User.query.get(user_id)
-    if not user:
-        flash("User not found.", "danger")
-        return redirect(url_for('main.home'))
+    # Construct photo path
+    photo_path = url_for('static', filename='images/profile_icon.png')  # 기본 이미지
+    if profile.photo and profile.photo.file_extension:
+        photo_path = url_for('static', filename=f"photos/photo-{profile.id}.{profile.photo.file_extension}")
 
     return render_template(
         'users/users.html',
         profile=profile,
-        user=user
+        photo_path=photo_path  # 이미지 경로 전달
     )
+
 
 @bp.route('/view_my/<int:user_id>', methods=['GET'])
 @login_required
@@ -58,67 +59,57 @@ def view_my_profile(user_id):
         flash("Profile not found.", "danger")
         return redirect(url_for('main.home'))
 
-    user = User.query.get(user_id)
-    if not user:
-        flash("User not found.", "danger")
-        return redirect(url_for('main.home'))
+    # 프로필 이미지 경로 생성
+    photo_path = None
+    if profile.photo and profile.photo.file_extension:
+        photo_path = url_for('static', filename=f"photos/photo-{profile.id}.{profile.photo.file_extension}")
 
     return render_template(
         'users/user_profile.html',
         profile=profile,
-        user=user
+        photo_path=photo_path  # 이미지 경로 전달
     )
 
-@bp.route('/edit', methods=['GET', 'POST'])
+@bp.route('/edit', methods=['POST'])
 @login_required
 def edit_profile():
     profile = Profile.query.filter_by(user_id=current_user.id).first()
 
-    if request.method == 'POST':
-        # 사용자 입력값 가져오기
-        first_name = request.form.get('first_name')
-        gender = request.form.get('gender')
-        birth_year = request.form.get('birth_year')
-        description = request.form.get('description', None)
-        photo = request.files.get('photo')
+    first_name = request.form.get('first_name')
+    gender = request.form.get('gender')
+    birth_year = request.form.get('birth_year')
+    description = request.form.get('description')
+    photo = request.files.get('photo')
 
-        # 입력값 검증
-        if not first_name or not gender or not birth_year:
-            flash("First name, gender, and birth year are required.", "danger")
-            return redirect(url_for('profiles.edit_profile'))
-    
-        # 프로필 업데이트
+    if first_name:
         profile.first_name = first_name
-        profile.gender = GenderEnum[gender]  # 문자열을 Enum으로 변환
+    if gender:
+        profile.gender = GenderEnum[gender]
+    if birth_year:
         profile.birth_year = int(birth_year)
+    if description:
         profile.description = description
-        
-        print(gender)
-        print(profile.gender)
-        # 사진 업로드 처리
-        if photo and allowed_file(photo.filename):
-            try:
-                relative_photo_path = save_photo(photo, profile.id)
-                profile.photo_path = relative_photo_path
-            except Exception as e:
-                db.session.rollback()
-                flash(f"Error saving photo: {e}", "danger")
-                return redirect(url_for('profiles.edit_profile'))
-        elif photo:
-            flash("Unsupported file type.", "danger")
-            return redirect(url_for('profiles.edit_profile'))
 
-        # 데이터베이스에 변경사항 저장
-        try:
-            db.session.commit()
-            flash("Profile updated successfully.", "success")
-        except Exception as e:
-            db.session.rollback()
-            flash(f"Error updating profile: {e}", "danger")
+    if photo and allowed_file(photo.filename):
+        file_extension = photo.filename.rsplit('.', 1)[1].lower()
+        filename = f"photo-{profile.id}.{file_extension}"
+        photo_path = os.path.join(current_app.static_folder, "photos", filename)
+        photo.save(photo_path)
 
-        return redirect(url_for('main.home'))
+        if profile.photo:
+            profile.photo.file_extension = file_extension
+        else:
+            new_photo = Photo(file_extension=file_extension, profile_id=profile.id)
+            db.session.add(new_photo)
 
-    return render_template('users/user_profile.html', profile=profile)
+    try:
+        db.session.commit()
+        flash("Profile updated successfully.", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error updating profile: {e}", "danger")
+
+    return redirect(url_for('profiles.view_my_profile', user_id=current_user.id))
 
 @bp.route('/browse', methods=['GET'])
 @login_required

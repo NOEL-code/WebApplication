@@ -72,9 +72,38 @@ def respond_to_proposal(proposal_id):  # Renamed to respond_to_proposal
 @login_required
 def list_proposals():
     # 내가 제안한 데이트
-    sent_proposals = DateProposal.query.filter_by(proposer_id=current_user.id).all()
+    sent_proposals = []
+    for proposal in DateProposal.query.filter_by(proposer_id=current_user.id).all():
+        recipient_profile = proposal.recipient.profile
+        image_url = (
+            f"photos/photo-{recipient_profile.user_id}.{recipient_profile.photo.file_extension}"
+            if recipient_profile and recipient_profile.photo
+            else None
+        )
+        sent_proposals.append({
+            "id": proposal.id,
+            "recipient_name": recipient_profile.first_name,
+            "recipient_image_url": image_url,
+            "proposed_date": proposal.proposed_date,
+            "status": proposal.status.value,
+        })
+
     # 내가 받은 데이트
-    received_proposals = DateProposal.query.filter_by(recipient_id=current_user.id).all()
+    received_proposals = []
+    for proposal in DateProposal.query.filter_by(recipient_id=current_user.id).all():
+        proposer_profile = proposal.proposer.profile
+        image_url = (
+            f"photos/photo-{proposer_profile.user_id}.{proposer_profile.photo.file_extension}"
+            if proposer_profile and proposer_profile.photo
+            else None
+        )
+        received_proposals.append({
+            "id": proposal.id,
+            "proposer_name": proposer_profile.first_name,
+            "proposer_image_url": image_url,
+            "proposed_date": proposal.proposed_date,
+            "status": proposal.status.value,
+        })
 
     return render_template(
         'proposals/list.html',

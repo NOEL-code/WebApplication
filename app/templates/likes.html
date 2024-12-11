@@ -1,67 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page_title }}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-  <div class="container">
-    <!-- Header Section -->
-    <header class="proposal-header">
-      <a
-        href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}"
-      >
-        <img
-          src="{{ url_for('static', filename='images/profile_icon.png') }}"
-          alt="Profile"
-          class="icon"
-        />
-      </a>
-      <h1 class="title">{{ app_name }}</h1>
-      <a href="{{ url_for('preferences.edit_preferences') }}">
-        <img
-          src="{{ url_for('static', filename='images/settings_icon.png') }}"
-          alt="Settings"
-          class="icon"
-        />
-      </a>
-      <!-- Back Button -->
-      <a href="{{ url_for('main.home') }}" class="back-button">
-        <img
-          src="{{ url_for('static', filename='images/back_icon.png') }}"
-          alt="Back"
-          class="icon"
-        />
-      </a>
-    </header>
-
-    <!-- Title Section -->
-    <h2 class="subtitle">Your Likes</h2>
-
-    <!-- Liked Profiles Section -->
-    <div class="likes-section">
-      {% for person in liked_profiles %}
-      <div class="profile-card">
-        <a href="{{ url_for('profiles.view_profile', user_id=person.id) }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ page_title }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header Section -->
+      <header class="proposal-header">
+        <a
+          href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}"
+        >
           <img
-            src="{{ url_for('static', filename=person.image_url) }}"
+            src="{{ url_for('static', filename='images/profile_icon.png') }}"
             alt="Profile"
-            class="profile-pic"
+            class="icon"
           />
         </a>
-        <p class="profile-name">{{ person.name }}</p>
-        <!-- 좋아요 취소 -->
-        <form action="{{ url_for('likes.remove_like', liked_id=person.id) }}" method="POST" style="display: inline">
-          <button type="submit" class="action-button">
-            ❤️
-          </button>
-        </form>
-        
+        <h1 class="title">{{ app_name if app_name else "Dine & Date" }}</h1>
+        <a href="{{ url_for('preferences.edit_preferences') }}">
+          <img
+            src="{{ url_for('static', filename='images/settings_icon.png') }}"
+            alt="Settings"
+            class="icon"
+          />
+        </a>
+        <a href="{{ url_for('main.home') }}" class="back-button">
+          <img
+            src="{{ url_for('static', filename='images/back_icon.png') }}"
+            alt="Back"
+            class="icon"
+          />
+        </a>
+      </header>
+
+      <!-- Title Section -->
+      <h2 class="subtitle">Your Likes</h2>
+
+      <!-- Liked Profiles Section -->
+      <div class="likes-section">
+        {% for person in liked_profiles %}
+        <div class="profile-card">
+          <!-- 프로필 이미지 -->
+          <a href="{{ url_for('profiles.view_profile', user_id=person.id) }}">
+            <img
+              src="{{ url_for('static', filename=person.image_url if person.image_url else 'images/default_profile.png') }}"
+              alt="Profile"
+              class="profile-pic"
+            />
+          </a>
+          <p class="profile-name">{{ person.name }}</p>
+          <!-- 좋아요 취소 -->
+          <form
+            action="{{ url_for('likes.remove_like', liked_id=person.id) }}"
+            method="POST"
+            style="display: inline"
+          >
+            <button type="submit" class="action-button">❤️ Remove Like</button>
+          </form>
+        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
-  </div>
-</body>
+  </body>
 </html>

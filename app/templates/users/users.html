@@ -9,10 +9,25 @@
       href="{{ url_for('static', filename='styles.css') }}"
     />
     <style>
-      /* 스타일 추가 */
+      /* 기본 스타일 */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
       .icon {
         width: 40px;
         height: 40px;
+        margin: 0 10px;
       }
       .btn {
         padding: 10px 20px;
@@ -20,6 +35,7 @@
         border-radius: 5px;
         border: none;
         cursor: pointer;
+        font-size: 14px;
       }
       .btn-primary {
         background-color: #6a6acb;
@@ -32,6 +48,43 @@
       .btn-danger {
         background-color: #f44336;
         color: #fff;
+      }
+      .profile-pic {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        margin: 20px auto;
+        border: 3px solid #ddd;
+      }
+      .profile-info input {
+        width: calc(100% - 20px);
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        background-color: #f5f5f5;
+      }
+      .profile-buttons-bar {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .action-button {
+        display: inline-block;
+        padding: 10px 15px;
+        margin: 5px;
+        font-size: 16px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #6a6acb;
+        color: white;
+        text-decoration: none;
+      }
+      .action-button:hover {
+        background-color: #5a5aba;
       }
     </style>
   </head>
@@ -48,7 +101,7 @@
             class="icon"
           />
         </a>
-        <h1 class="title">{{ app_name }}</h1>
+        <h1 class="title">{{ app_name if app_name else "Dine & Date" }}</h1>
         <a href="{{ url_for('preferences.edit_preferences') }}">
           <img
             src="{{ url_for('static', filename='images/settings_icon.png') }}"
@@ -56,7 +109,6 @@
             class="icon"
           />
         </a>
-        <!-- Back Button -->
         <a href="{{ url_for('main.home') }}" class="back-button">
           <img
             src="{{ url_for('static', filename='images/back_icon.png') }}"
@@ -71,7 +123,7 @@
         <div class="profile-image-section">
           {% if profile.photo and profile.photo.file_extension %}
           <img
-            src="{{ url_for('static', filename='photos/profile-' ~ profile.user_id ~ '.' ~ profile.photo.file_extension) }}"
+            src="{{ url_for('static', filename='photos/photo-' ~ profile.id ~ '.' ~ profile.photo.file_extension) }}"
             alt="Profile Image"
             class="profile-pic"
           />
@@ -84,30 +136,24 @@
           {% endif %}
         </div>
         <div class="profile-info">
-          <div>
-            <input
-              type="text"
-              value="{{ profile.first_name }}"
-              placeholder="Username"
-              disabled
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              value="{{ profile.gender.value }}"
-              placeholder="Gender"
-              disabled
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              value="{{ profile.birth_year }}"
-              placeholder="Year"
-              disabled
-            />
-          </div>
+          <input
+            type="text"
+            value="{{ profile.first_name }}"
+            placeholder="Username"
+            disabled
+          />
+          <input
+            type="text"
+            value="{{ profile.gender.value }}"
+            placeholder="Gender"
+            disabled
+          />
+          <input
+            type="text"
+            value="{{ profile.birth_year }}"
+            placeholder="Year"
+            disabled
+          />
         </div>
       </div>
 
@@ -119,15 +165,18 @@
           method="POST"
           style="display: inline"
         >
-          <button type="submit" class="action-button">❤️</button>
+          <button type="submit" class="action-button" title="Like">
+            ❤️ Like
+          </button>
         </form>
 
         <!-- Propose Button -->
         <a
           href="{{ url_for('proposals.create_proposal', recipient_id=profile.user_id) }}"
           class="action-button"
+          title="Propose"
         >
-          📅
+          📅 Propose
         </a>
 
         <!-- Block Button -->
@@ -136,7 +185,9 @@
           method="POST"
           style="display: inline"
         >
-          <button type="submit" class="action-button">🚫</button>
+          <button type="submit" class="action-button btn-danger" title="Block">
+            🚫 Block
+          </button>
         </form>
       </div>
     </div>

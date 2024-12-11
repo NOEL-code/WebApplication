@@ -4,64 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Edit Profile</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='styles.css') }}"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <style>
+      .profile-image-section img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
       <!-- Header Section -->
       <header class="proposal-header">
-        <a
-          href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}"
-        >
-          <img
-            src="{{ url_for('static', filename='images/profile_icon.png') }}"
-            alt="Profile"
-            class="icon"
-          />
+        <a href="{{ url_for('profiles.view_my_profile', user_id=current_user.id) }}">
+          <img src="{{ url_for('static', filename='images/profile_icon.png') }}" alt="Profile" class="icon" />
         </a>
         <h1 class="title">{{ app_name }}</h1>
         <a href="{{ url_for('preferences.edit_preferences') }}">
-          <img
-            src="{{ url_for('static', filename='images/settings_icon.png') }}"
-            alt="Settings"
-            class="icon"
-          />
+          <img src="{{ url_for('static', filename='images/settings_icon.png') }}" alt="Settings" class="icon" />
         </a>
         <!-- Back Button -->
         <a href="{{ url_for('main.home') }}" class="back-button">
-          <img
-            src="{{ url_for('static', filename='images/back_icon.png') }}"
-            alt="Back"
-            class="icon"
-          />
+          <img src="{{ url_for('static', filename='images/back_icon.png') }}" alt="Back" class="icon" />
         </a>
       </header>
+
       <!-- Title Section -->
       <h2 class="subtitle">Edit User Profile</h2>
+
       <!-- Profile Edit Form -->
-      <form
-        action="{{ url_for('profiles.edit_profile') }}"
-        method="POST"
-        enctype="multipart/form-data"
-      >
+      <form action="{{ url_for('profiles.edit_profile') }}" method="POST" enctype="multipart/form-data">
         <!-- Profile Image -->
         <div class="profile-image-section">
-          {% if profile.photo and profile.photo.file_extension %}
           <img
-            src="{{ url_for('static', filename='photos/profile-' ~ profile.user_id ~ '.' ~ profile.photo.file_extension) }}"
-            alt="Profile Image"
-            class="profile-pic"
+            id="profilePreview"
+            src="{{ photo_path if photo_path else url_for('static', filename='images/profile_icon.png') }}"
+            class="profile-image"
           />
-          {% else %}
-          <img
-            src="{{ url_for('static', filename='images/default_profile.png') }}"
-            alt="Default Profile"
-            class="profile-pic"
-          />
-          {% endif %}
           <label for="photo" class="btn btn-primary">Change Photo</label>
           <input
             type="file"
@@ -69,69 +50,67 @@
             id="photo"
             accept="image/*"
             style="display: none;"
+            onchange="updatePreview(event)"
           />
         </div>
-
+        
+        <script>
+          function updatePreview(event) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              document.getElementById("profilePreview").src = e.target.result; // 미리보기 이미지 업데이트
+            };
+            if (event.target.files && event.target.files[0]) {
+              reader.readAsDataURL(event.target.files[0]);
+            }
+          }
+        </script>
         <!-- Profile Information -->
         <div class="profile-info">
           <div class="form-group">
             <label for="first_name">First Name</label>
-            <input
-              type="text"
-              id="first_name"
-              name="first_name"
-              value="{{ profile.first_name }}"
-              required
-            />
+            <input type="text" id="first_name" name="first_name" value="{{ profile.first_name }}" required />
           </div>
           <div class="form-group">
             <label for="gender">Gender</label>
             <select id="gender" name="gender" required>
-              <option value="MALE" {% if profile.gender.value == "male" %} selected{% endif %}>
-                MALE
-              </option>
-              <option value="FEMALE" {% if profile.gender.value == "female" %}selected{% endif %}>
-                FEMALE
-              </option>
-              <option value="OTHER" {% if profile.gender.value == "other" %}selected{% endif %}>
-                OTHER
-              </option>
+              <option value="MALE" {% if profile.gender.value == "male" %} selected{% endif %}>Male</option>
+              <option value="FEMALE" {% if profile.gender.value == "female" %} selected{% endif %}>Female</option>
+              <option value="OTHER" {% if profile.gender.value == "other" %} selected{% endif %}>Other</option>
             </select>
           </div>
           <div class="form-group">
             <label for="birth_year">Birth Year</label>
-            <input
-              type="number"
-              id="birth_year"
-              name="birth_year"
-              value="{{ profile.birth_year }}"
-              required
-            />
+            <input type="number" id="birth_year" name="birth_year" value="{{ profile.birth_year }}" required />
           </div>
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              rows="4"
-              required
-            >{{ profile.description }}</textarea>
+            <textarea id="description" name="description" rows="4" required>{{ profile.description }}</textarea>
           </div>
         </div>
 
         <!-- Submit Button -->
         <button type="submit" class="btn btn-primary">Save Changes</button>
       </form>
-
-      <!-- Additional Buttons -->
-      <div class="buttons">
-        <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary"
-          >🚪 Logout</a
-        >
-        <a href="{{ url_for('blocks_bp.blocked_users_list') }}" class="btn btn-secondary"
-          >🚫 Blocked List</a
-        >
-      </div>
     </div>
+    <div class="buttons">
+      <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary"
+        >🚪 Logout</a
+      >
+      <a href="{{ url_for('blocks_bp.blocked_users_list') }}" class="btn btn-secondary"
+        >🚫 Blocked List</a
+      >
+    </div>
+    <script>
+      function updatePreview(event) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("profilePreview").src = e.target.result; // 이미지 미리보기 업데이트
+        };
+        if (event.target.files && event.target.files[0]) {
+          reader.readAsDataURL(event.target.files[0]);
+        }
+      }
+    </script>
   </body>
 </html>
