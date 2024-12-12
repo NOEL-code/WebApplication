@@ -38,6 +38,12 @@ def home():
     if preferred_genders:
         profiles_query = profiles_query.filter(Profile.gender.in_(preferred_genders))
 
+    if preference:
+        current_year = datetime.utcnow().year
+        min_birth_year = current_year - preference.max_age
+        max_birth_year = current_year - preference.min_age
+        profiles_query = profiles_query.filter(Profile.birth_year.between(min_birth_year, max_birth_year))
+
     if query:
         profiles_query = profiles_query.filter(Profile.first_name.ilike(f"%{query}%"))
 
